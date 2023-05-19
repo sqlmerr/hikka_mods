@@ -6,7 +6,7 @@
 # .mevoprofile | .mevocases
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 1, 0)
+__version__ = (0, 1, 2)
 # meta developer: @sqlmerr_m
 
 
@@ -52,6 +52,7 @@ class MineEVO(loader.Module):
                 lambda: self.strings("mine_status"),
                 validator=loader.validators.Boolean()
             )
+        )
 
     @loader.command()
     async def mevoprofile(self, message: Message):
