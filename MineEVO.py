@@ -114,7 +114,7 @@ class MineEVO(loader.Module):
 
         while self.config["perevod_status"]:
             for i in range(args[0]):
-                await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]}")
+                await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
                 sleep(interval)
 
         
