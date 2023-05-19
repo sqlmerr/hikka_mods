@@ -41,14 +41,12 @@ class MineEVO(loader.Module):
                 "mine_interval",
                 2,
                 lambda: self.strings("mine_interval")
-                validator=loader.validators.Integer(),
-            ),
+                validator=loader.validators.Integer()),
             loader.ConfigValue(
                 "mine_status",
                 False,
                 lambda: self.strings("mine_status")
-                validator=loader.validators.Boolean(),
-            ),
+                validator=loader.validators.Boolean()),
         )
 
     @loader.command()
