@@ -3,10 +3,10 @@
 # Description: Полезный модуль для бота @mine_evo_bot
 # Author: sqlmerr
 # Commands:
-# .mevoprofile | .mevocases
+# .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 1, 4)
+__version__ = (0, 1, 8)
 # meta developer: @sqlmerr_m
 
 
@@ -29,13 +29,12 @@ class MineEVO(loader.Module):
     """Полезный модуль для бота @mine_evo_bot"""
     strings = {
         "name": "MineEVO",
-        "mine_interval": "Интервал копания в секундах (integer)",
-        "mine_status": "Ну тип копаете вы или нет"
+        "mine_interval": "Интервал копания",
+        "mine_status": "Ну тип копаете вы или нет",
+        "perevod_interval": "Интервал перевода лимитов",
+        "perevod_status": "Ну тип переводите вы лимиты или нет"
     }
-    strings_ru = {
-        "mine_interval": "Интервал копания в секундах (integer)",
-        "mine_status": "Ну тип копаете вы или нет"
-    }
+
 
     def __init__(self):
         self.config = loader.ModuleConfig(
@@ -50,6 +49,18 @@ class MineEVO(loader.Module):
                 "mine_status",
                 False,
                 lambda: self.strings("mine_status"),
+                validator=loader.validators.Boolean()
+            ),
+            loader.ConfigValue(
+                "perevod_interval",
+                2.0,
+                lambda: self.strings("perevod_interval"), 
+                validator=loader.validators.Float()
+            ),
+            loader.ConfigValue(
+                "perevod_status",
+                False,
+                lambda: self.strings("perevod_interval"), 
                 validator=loader.validators.Boolean()
             )
         )
@@ -79,9 +90,31 @@ class MineEVO(loader.Module):
             return
         interval = self.config["mine_interval"]
 
-        logger.debug("start mining")            
+        logger.debug("start mining...")            
         await utils.answer(message, 'Копаю ⛏')
 
         while self.config["mine_status"]:
             await self.client.send_message("@mine_evo_bot", "Копать")
             sleep(interval)
+    @loader.command()
+    async def mevoperevod(self, message: Message):
+        """.mevoperevod <кол-во лимитов> <ник чела в боте> - Автоматически переводит лимиты за вас"""
+        if not self.config["perevod_status"]:
+            await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> perevod_status -> Измените False на True. Это сделано для защиты от случайных переводов")
+            return
+        interval = self.config["perevod_interval"]
+        args = utils.get_args_raw(message).split()
+
+        if not args:
+            utils.answer(message, 'ошибка')
+            return
+
+        logger.debug("starting to transfer limits...")
+        await utils.answer(message, 'Начинаю переводить лимиты')
+
+        while self.config["perevod_status"]:
+            for i in range(args[0]):
+                await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]}")
+                sleep(interval)
+
+        
