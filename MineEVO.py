@@ -17,6 +17,8 @@ from telethon import events, functions, types
 
 import logging
 
+from time import sleep
+
 from .. import loader, utils
 
 
@@ -40,7 +42,9 @@ class MineEVO(loader.Module):
             loader.ConfigValue(
                 "mine_interval",
                 2,
-                lambda: self.strings("mine_interval"), validator=loader.validators.Integer()),
+                lambda: self.strings("mine_interval"), 
+                validator=loader.validators.Float()
+            ),
 
             loader.ConfigValue(
                 "mine_status",
@@ -70,8 +74,11 @@ class MineEVO(loader.Module):
     async def mevomine(self, message: Message):
         """Автоматически копает за вас"""
         if not self.config["mine_status"]:
+            await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> mine_status -> Измените False на True")
             return
         logger.debug("start mining")
         while self.config["mine_status"]:
             await self.client.send_message("@mine_evo_bot", "Копать")
+            sleep(self.config["mine_interval"])
+            
         await utils.answer(message, 'Копаю ⛏')
