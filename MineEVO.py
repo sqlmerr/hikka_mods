@@ -40,14 +40,15 @@ class MineEVO(loader.Module):
             loader.ConfigValue(
                 "mine_interval",
                 2,
-                lambda: self.strings("mine_interval")
-                validator=loader.validators.Integer()),
+                lambda: self.strings("mine_interval"),
+                validator=loader.validators.Integer()
+            ),
             loader.ConfigValue(
                 "mine_status",
                 False,
-                lambda: self.strings("mine_status")
-                validator=loader.validators.Boolean()),
-        )
+                lambda: self.strings("mine_status"),
+                validator=loader.validators.Boolean()
+            )
 
     @loader.command()
     async def mevoprofile(self, message: Message):
