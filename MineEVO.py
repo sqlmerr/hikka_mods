@@ -6,7 +6,7 @@
 # .mevoprofile | .mevocases
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 1, 3)
+__version__ = (0, 1, 4)
 # meta developer: @sqlmerr_m
 
 
@@ -41,7 +41,7 @@ class MineEVO(loader.Module):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "mine_interval",
-                2,
+                2.0,
                 lambda: self.strings("mine_interval"), 
                 validator=loader.validators.Float()
             ),
