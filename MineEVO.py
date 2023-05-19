@@ -6,7 +6,7 @@
 # .mevoprofile | .mevocases
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 1, 2)
+__version__ = (0, 1, 3)
 # meta developer: @sqlmerr_m
 
 
@@ -78,9 +78,10 @@ class MineEVO(loader.Module):
             await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> mine_status -> Измените False на True")
             return
         interval = self.config["mine_interval"]
-        logger.debug("start mining")
+
+        logger.debug("start mining")            
+        await utils.answer(message, 'Копаю ⛏')
+
         while self.config["mine_status"]:
             await self.client.send_message("@mine_evo_bot", "Копать")
             sleep(interval)
-            
-        await utils.answer(message, 'Копаю ⛏')
