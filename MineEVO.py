@@ -76,9 +76,10 @@ class MineEVO(loader.Module):
         if not self.config["mine_status"]:
             await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> mine_status -> Измените False на True")
             return
+        interval = self.config["mine_interval"]
         logger.debug("start mining")
         while self.config["mine_status"]:
             await self.client.send_message("@mine_evo_bot", "Копать")
-            sleep(self.config["mine_interval"])
+            sleep(interval)
             
         await utils.answer(message, 'Копаю ⛏')
