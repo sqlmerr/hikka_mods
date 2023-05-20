@@ -6,7 +6,7 @@
 # .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 1, 8)
+__version__ = (0, 2, 0)
 # meta developer: @sqlmerr_m
 
 
@@ -116,5 +116,5 @@ class MineEVO(loader.Module):
             for i in range(int(args[0])):
                 await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
                 sleep(interval)
-
-        
+            await utils.answer(message, 'Все лимиты переведены!')
+            return
