@@ -12,7 +12,7 @@
 # .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 2, 3)
+__version__ = (0, 2, 4)
 # meta developer: @sqlmerr_m
 
 
@@ -98,11 +98,7 @@ class MineEVO(loader.Module):
 
         logger.debug("start mining...")            
         await utils.answer(message, 'Копаю ⛏')
-
-        while self.config["mine_status"]:
-            if self.config["perevod_status"]:
-                await self.client.send_message("@mine_evo_bot", "Копать")
-                await sleep(interval)
+        while self.config["perevod_status"]:
             else:
                 await utils.answer(message, 'Вы остановили майнинг')
 
@@ -127,7 +123,7 @@ class MineEVO(loader.Module):
             if self.config["perevod_status"]:
                 for i in range(int(args[0])):
                     await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
-                    sleep(interval)
+                    await sleep(interval)
                 await utils.answer(message, 'Все лимиты переведены!')
                 return
             else:
