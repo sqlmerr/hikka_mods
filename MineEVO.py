@@ -12,7 +12,7 @@
 # .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 2, 4)
+__version__ = (0, 2, 5)
 # meta developer: @sqlmerr_m
 
 
@@ -98,7 +98,10 @@ class MineEVO(loader.Module):
 
         logger.debug("start mining...")            
         await utils.answer(message, 'Копаю ⛏')
-        while self.config["perevod_status"]:
+        while self.config["mine_status"]:
+            if self.config["mine_status"]:
+                await self.client.send_message("@mine_evo_bot", "коп")
+                await sleep(interval)
             else:
                 await utils.answer(message, 'Вы остановили майнинг')
 
