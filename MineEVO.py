@@ -12,7 +12,7 @@
 # .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 2, 0)
+__version__ = (0, 2, 3)
 # meta developer: @sqlmerr_m
 
 
@@ -23,7 +23,7 @@ from telethon import events, functions, types
 
 import logging
 
-from time import sleep
+from asyncio import sleep
 
 from .. import loader, utils
 
@@ -100,8 +100,13 @@ class MineEVO(loader.Module):
         await utils.answer(message, 'Копаю ⛏')
 
         while self.config["mine_status"]:
-            await self.client.send_message("@mine_evo_bot", "Копать")
-            sleep(interval)
+            if self.config["perevod_status"]:
+                await self.client.send_message("@mine_evo_bot", "Копать")
+                await sleep(interval)
+            else:
+                await utils.answer(message, 'Вы остановили майнинг')
+
+
     @loader.command()
     async def mevoperevod(self, message: Message):
         """.mevoperevod <кол-во лимитов> <ник чела в боте> - Автоматически переводит лимиты за вас"""
@@ -119,8 +124,11 @@ class MineEVO(loader.Module):
         await utils.answer(message, 'Начинаю переводить лимиты')
 
         while self.config["perevod_status"]:
-            for i in range(int(args[0])):
-                await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
-                sleep(interval)
-            await utils.answer(message, 'Все лимиты переведены!')
-            return
+            if self.config["perevod_status"]:
+                for i in range(int(args[0])):
+                    await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
+                    sleep(interval)
+                await utils.answer(message, 'Все лимиты переведены!')
+                return
+            else:
+                await utils.answer(message, 'Вы остановили перевод лимитов')
