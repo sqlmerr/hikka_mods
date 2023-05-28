@@ -12,7 +12,7 @@
 # .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 2, 5)
+__version__ = (0, 2, 6)
 # meta developer: @sqlmerr_m
 
 
@@ -74,6 +74,7 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mevoprofile(self, message: Message):
         """отправляет в текущий чат ваш профиль в боте @mine_evo_bot (❗️не рекомендую использовать во время копания❗️)"""
+        await utils.answer(message, 'pon')
         async with self._client.conversation("@mine_evo_bot") as conv:
             await conv.send_message('профиль')  # upload step
             response = await conv.get_response() # first message
@@ -122,12 +123,12 @@ class MineEVO(loader.Module):
         logger.debug("starting to transfer limits...")
         await utils.answer(message, 'Начинаю переводить лимиты')
 
-        while self.config["perevod_status"]:
-            if self.config["perevod_status"]:
-                for i in range(int(args[0])):
+        if self.config["perevod_status"]:
+            for i in range(int(args[0])):
+                if self.config["perevod_status"]:
                     await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
                     await sleep(interval)
-                await utils.answer(message, 'Все лимиты переведены!')
-                return
-            else:
-                await utils.answer(message, 'Вы остановили перевод лимитов')
+                else:
+                    await utils.answer(message, 'Вы остановили перевод лимитов')
+                    return
+            await utils.answer(message, 'Все лимиты переведены!')
