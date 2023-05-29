@@ -12,7 +12,7 @@
 # .mevoprofile | .mevocases | .mevoperevod | .mevomine
 # ---------------------------------------------------------------------------------
 
-__version__ = (0, 2, 6)
+__version__ = (0, 3, 0)
 # meta developer: @sqlmerr_m
 
 
@@ -20,6 +20,7 @@ import asyncio
 
 from telethon.tl.types import Message
 from telethon import events, functions, types
+from telethon.tl.types import ChatAdminRights
 
 import logging
 
@@ -41,6 +42,25 @@ class MineEVO(loader.Module):
         "perevod_status": "Ну тип переводите вы лимиты или нет"
     }
 
+    async def client_ready(self):
+        self._backup_channel, _ = await utils.asset_channel(
+            self._client,
+            "MineEVO - чат",
+            "Не пишите сюда. Этот чат предназначет для модуля MineEVO",
+            silent=True,
+            archive=True,
+            _folder="hikka",
+        )
+
+        await self.client(functions.channels.InviteToChannelRequest(self._backup_channel, ['@mine_evo_bot']))
+        await self.client(functions.channels.EditAdminRequest(
+                channel=self._backup_channel,
+                user_id="@mine_evo_bot",
+                admin_rights=ChatAdminRights(ban_users=True, post_messages=True, edit_messages=True),
+                rank="MineEVO",
+            )
+        )
+
 
     def __init__(self):
         self.config = loader.ModuleConfig(
@@ -50,7 +70,6 @@ class MineEVO(loader.Module):
                 lambda: self.strings("mine_interval"), 
                 validator=loader.validators.Float()
             ),
-
             loader.ConfigValue(
                 "mine_status",
                 False,
@@ -66,7 +85,13 @@ class MineEVO(loader.Module):
             loader.ConfigValue(
                 "perevod_status",
                 False,
-                lambda: self.strings("perevod_interval"), 
+                lambda: self.strings("perevod_status"), 
+                validator=loader.validators.Boolean()
+            ),
+            loader.ConfigValue(
+                "autobonus_status",
+                False,
+                lambda: self.strings("autobonus_status"), 
                 validator=loader.validators.Boolean()
             )
         )
@@ -75,7 +100,7 @@ class MineEVO(loader.Module):
     async def mevoprofile(self, message: Message):
         """отправляет в текущий чат ваш профиль в боте @mine_evo_bot (❗️не рекомендую использовать во время копания❗️)"""
         await utils.answer(message, 'pon')
-        async with self._client.conversation("@mine_evo_bot") as conv:
+        async with self._client.conversation(self._backup_channel) as conv:
             await conv.send_message('профиль')  # upload step
             response = await conv.get_response() # first message
             await utils.answer(message, response)
@@ -84,7 +109,7 @@ class MineEVO(loader.Module):
     async def mevocases(self, message: Message):
         """отправляет в текущий чат ваши кейсы в боте @mine_evo_bot (❗️не рекомендую использовать во время копания❗️)"""
         
-        async with self._client.conversation("@mine_evo_bot") as conv:
+        async with self._client.conversation(self._backup_channel) as conv:
             await conv.send_message('кейсы')  # upload step
             response = await conv.get_response() # first message
             await utils.answer(message, response)
@@ -132,3 +157,4 @@ class MineEVO(loader.Module):
                     await utils.answer(message, 'Вы остановили перевод лимитов')
                     return
             await utils.answer(message, 'Все лимиты переведены!')
+
