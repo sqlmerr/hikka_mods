@@ -18,9 +18,8 @@ __version__ = (0, 3, 0)
 
 import asyncio
 
-from telethon.tl.types import Message
+from telethon.tl.types import Message, ChatAdminRights
 from telethon import events, functions, types
-from telethon.tl.types import ChatAdminRights
 
 import logging
 
