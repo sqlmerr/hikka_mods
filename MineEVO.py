@@ -40,7 +40,7 @@ class MineEVO(loader.Module):
     }
 
     async def client_ready(self):
-        self._backup_channel, _ = await utils.asset_channel(
+        self._mineevo_channel, _ = await utils.asset_channel(
             self._client,
             "MineEVO - чат",
             "Не пишите сюда. Этот чат предназначет для модуля MineEVO",
@@ -51,7 +51,7 @@ class MineEVO(loader.Module):
 
         await self.client(functions.channels.InviteToChannelRequest(self._mineevo_channel, ['@mine_evo_bot']))
         await self.client(functions.channels.EditAdminRequest(
-                channel=self._backup_channel,
+                channel=self._mineevo_channel,
                 user_id="@mine_evo_bot",
                 admin_rights=ChatAdminRights(ban_users=True, post_messages=True, edit_messages=True),
                 rank="MineEVO",
@@ -163,9 +163,8 @@ class MineEVO(loader.Module):
         if not self.config["autobonus_status"]:
             await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> autobonus_status -> Измените False на True. Это сделано для защиты от случайных переводов")
             return
-		await utils.answer(message, 'Начинаю авто-сбор ежедневных бонусов!')
-		while self.config["autobonus_status"]:
-			if self.config["autobonus_status"]:
-				await self.client.send_message(self._mineevo_channel, "еб")
-				await asyncio.sleep(86400)
-
+        await utils.answer(message, 'Начинаю авто-сбор ежедневных бонусов!')
+        while self.config["autobonus_status"]:
+        	if self.config["autobonus_status"]:
+        		await self.client.send_message(self._mineevo_channel, "еб")
+        		await asyncio.sleep(86400)
