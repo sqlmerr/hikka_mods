@@ -145,7 +145,7 @@ class MineEVO(loader.Module):
         await utils.answer(message, response.text)
     # .mevomine
     @loader.command()
-    async def mevomine(self, message: Message):
+    async def mevomine(self, message: Message)::
         """Автоматически копает за вас"""
         if not self.config["mine_status"]:
             # если в конфиге параметр mine_status имеет значение False, то функция не выполняется дальше
@@ -224,12 +224,13 @@ class MineEVO(loader.Module):
                     b = await conv.get_response()
                     try:
                         с = await conv.get_responce()
+                        if b == c:
+                            list_msgs_id.append(c.id)
                     except:
                         pass
                     
                 list_msgs_id = [a.id, b.id]
-                if b == c:
-                    list_msgs_id.append(c.id)
+
 
                 if response.text.endswith('благодарить некого.'):
                     await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
