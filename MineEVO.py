@@ -145,7 +145,7 @@ class MineEVO(loader.Module):
         await utils.answer(message, response.text)
     # .mevomine
     @loader.command()
-    async def mevomine(self, message: Message)::
+    async def mevomine(self, message: Message):
         """Автоматически копает за вас"""
         if not self.config["mine_status"]:
             # если в конфиге параметр mine_status имеет значение False, то функция не выполняется дальше
