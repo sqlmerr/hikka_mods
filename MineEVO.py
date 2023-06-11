@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 4, 5)
+__version__ = (0, 4, 6)
 # meta developer: @sqlmerr_m
 
 # импортируем нужные библиотеки
@@ -98,12 +98,6 @@ class MineEVO(loader.Module):
                 "autobonus_status",
                 False,
                 lambda: self.strings("autobonus_status"),
-                validator=loader.validators.Boolean()
-            ),
-            loader.ConfigValue(
-                "autopromo_status",
-                True,
-                lambda: self.strings("autopromo_status"),
                 validator=loader.validators.Boolean()
             ),
             loader.ConfigValue(
@@ -228,7 +222,10 @@ class MineEVO(loader.Module):
                     a = await conv.send_message('thx')
                     # получаем ответ
                     b = await conv.get_response()
-                    с = await conv.get_responce()
+                    try:
+                        с = await conv.get_responce()
+                    except:
+                        pass
                     
                 list_msgs_id = [a.id, b.id]
                 if b == c:
