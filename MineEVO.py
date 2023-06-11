@@ -227,9 +227,13 @@ class MineEVO(loader.Module):
                 async with self._client.conversation(self._mineevo_channel) as conv:
                     a = await conv.send_message('thx')
                     # получаем ответ
-                    b = response = await conv.get_response()
-
+                    b = await conv.get_response()
+                    с = await conv.get_responce()
+                    
                 list_msgs_id = [a.id, b.id]
+                if b == c:
+                    list_msgs_id.append(c.id)
+
                 if response.text.endswith('благодарить некого.'):
                     await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
                 elif response.text.endswith('этого игрока за глобальный бустер!'):
