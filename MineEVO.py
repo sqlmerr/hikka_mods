@@ -232,9 +232,9 @@ class MineEVO(loader.Module):
                 list_msgs_id = [a.id, b.id]
 
 
-                if response.text.endswith('благодарить некого.'):
+                if b.text.endswith('благодарить некого.') or c.text.endswith('благодарить некого.'):
                     await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
-                elif response.text.endswith('этого игрока за глобальный бустер!'):
+                elif b.text.endswith('этого игрока за глобальный бустер!') or c.text.endswith('этого игрока за глобальный бустер!'):
                     await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
                 await asyncio.sleep(600)
             else:
