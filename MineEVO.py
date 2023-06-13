@@ -9,11 +9,11 @@
 # Description: Полезный модуль для бота @mine_evo_bot
 # Author: sqlmerr
 # Commands:
-# .mevoprofile | .mevocases | .mevoperevod | .mevomine | .mevoautobonus | .mevoautothx | .mevoautopromo
+# .mevoprofile | .mevocases | .mevoperevod | .mevomine | .mevoautobonus | .mevoautothx 
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 1)
+__version__ = (0, 5, 2)
 # meta developer: @sqlmerr_m
 
 # импортируем нужные библиотеки
@@ -45,6 +45,8 @@ class MineEVO(loader.Module):
         "autobonus_status": "Получаете ли вы автоматически ежедневный бонус или нет",
         "autopromo_status": "Пишите ли вы автоматически промо или нет",
         "autothx_status": "Пишите ли вы автоматически Thx или нет",
+        "autosell_status": "Продаёте ли вы каждые 10 минут руду",
+        "autosell_ore": "Руда, которую вы продаёте ❗пишите руду с заглавной буквы. Если руда имеет 3 уровня, пишите уровень заглавной английской и (первый уровень - I , второй - II , третий - III)❗ например: <code>Земля I</code> или <code>Песчанник</code>"
     }
     # когда клиент готов к работе:
     async def client_ready(self):
@@ -112,7 +114,7 @@ class MineEVO(loader.Module):
                 False,
                 lambda: self.strings("autothx_status"),
                 validator=loader.validators.Boolean()
-            )
+            ),
         )
     # .mevoprofile
     @loader.command()
@@ -220,8 +222,7 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mevoautothx(self, message: Message):
         """автоматически пишет thx"""
-        if not self.config["autothx_status"]:
-            return await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> autothx_status -> Измените False на True.")
+        self.config["autothx_status"] = not self.config["autothx_status"]
         while True:
             if self.config["autothx_status"]:
                 async with self._client.conversation(self._mineevo_channel) as conv:
@@ -229,28 +230,22 @@ class MineEVO(loader.Module):
                     # получаем ответ
                     b = await conv.get_response()
                     list_msgs_id = [a.id, b.id]
-                    try:
-                        с = await conv.get_responce()
-                        if b == c:
-                            list_msgs_id.append(c.id)
-                    except:
-                        c = b
-                    
 
-                if b.text.endswith('благодарить некого.') or c.text.endswith('благодарить некого.'):
+                if 'благодарить некого.' in b.text:
                     await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
-                elif b.text.endswith('этого игрока за глобальный бустер!') or c.text.endswith('этого игрока за глобальный бустер!'):
+                elif 'этого игрока за глобальный бустер!' in b.text:
                     await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
-                await asyncio.sleep(600)
+                await asyncio.sleep(3600)
             else:
                 return await self.client.send_message(self._mineevo_channel, 'Вы остановили авто-thx')
 
 
+    # 
     @loader.watcher(only_messages=True, from_id=-1001892345917)
     async def watcher(self, message: Message):
         if not self.config["autopromo_status"]:
             return
-        if "ежедневный промо-кодик" in message.text and "Пиши в боте:" in message.text:
+        if "Новые промокоды каждый день, включи уведомления и не пропусти их!" in message.text and "Пиши в боте:" in message.text:
             promo_start = message.text.index("Промо ") + len("Промо ") # находим начало промокода
             promo_end = message.text.index("\n", promo_start) # находим конец промокода
             promo_code = message.text[promo_start:promo_end] # извлекаем код из сообщения
