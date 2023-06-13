@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 2)
+__version__ = (0, 5, 3)
 # meta developer: @sqlmerr_m
 
 # импортируем нужные библиотеки
@@ -222,9 +222,11 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mevoautothx(self, message: Message):
         """автоматически пишет thx"""
-        self.config["autothx_status"] = not self.config["autothx_status"]
+        if not self.config["autothx_status"]:
+            return await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> autothx_status -> Измените False на True.")
         while True:
             if self.config["autothx_status"]:
+                await utils.answer(message, "Начинаю авто-thx")
                 async with self._client.conversation(self._mineevo_channel) as conv:
                     a = await conv.send_message('thx')
                     # получаем ответ
