@@ -9,11 +9,11 @@
 # Description: Полезный модуль для бота @mine_evo_bot
 # Author: sqlmerr
 # Commands:
-# .mevoprofile | .mevocases | .mevoperevod | .mevomine | .mevoautobonus | .mevoautothx 
+# .mevoprofile | .mevocases | .mevoperevod | .mevomine | .mevoautobonus | .mevoautothx
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 4)
+__version__ = (0, 5, 5)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -242,7 +242,7 @@ class MineEVO(loader.Module):
 
 
     # auto-promo (idea: https://t.me/Demchik347)
-    @loader.watcher(only_messages=True, from_id=-1001951702424)
+    @loader.watcher(only_messages=True, from_id=-1001892345917)
     async def watcher(self, message: Message):
         if not self.config["autopromo_status"]:
             return
