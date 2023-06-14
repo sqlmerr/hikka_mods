@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 5)
+__version__ = (0, 5, 6)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -223,9 +223,9 @@ class MineEVO(loader.Module):
         """автоматически пишет thx"""
         if not self.config["autothx_status"]:
             return await utils.answer(message, "Поставьте <code>True</code> в конфиге модуля! Для этого напишите команду .config -> Внешние -> MineEVO -> autothx_status -> Измените False на True.")
+        await utils.answer(message, "Начинаю авто-thx")
         while True:
             if self.config["autothx_status"]:
-                await utils.answer(message, "Начинаю авто-thx")
                 async with self._client.conversation(self._mineevo_channel) as conv:
                     a = await conv.send_message('thx')
                     # получаем ответ
