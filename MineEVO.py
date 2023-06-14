@@ -13,8 +13,9 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 3)
+__version__ = (0, 5, 4)
 # meta developer: @sqlmerr_m
+# only hikka
 
 # импортируем нужные библиотеки
 import asyncio
@@ -45,8 +46,6 @@ class MineEVO(loader.Module):
         "autobonus_status": "Получаете ли вы автоматически ежедневный бонус или нет",
         "autopromo_status": "Пишите ли вы автоматически промо или нет",
         "autothx_status": "Пишите ли вы автоматически Thx или нет",
-        "autosell_status": "Продаёте ли вы каждые 10 минут руду",
-        "autosell_ore": "Руда, которую вы продаёте ❗пишите руду с заглавной буквы. Если руда имеет 3 уровня, пишите уровень заглавной английской и (первый уровень - I , второй - II , третий - III)❗ например: <code>Земля I</code> или <code>Песчанник</code>"
     }
     # когда клиент готов к работе:
     async def client_ready(self):
@@ -242,12 +241,12 @@ class MineEVO(loader.Module):
                 return await self.client.send_message(self._mineevo_channel, 'Вы остановили авто-thx')
 
 
-    # 
-    @loader.watcher(only_messages=True, from_id=-1001892345917)
+    # auto-promo (idea: https://t.me/Demchik347)
+    @loader.watcher(only_messages=True, from_id=-1001951702424)
     async def watcher(self, message: Message):
         if not self.config["autopromo_status"]:
             return
-        if "Новые промокоды каждый день, включи уведомления и не пропусти их!" in message.text and "Пиши в боте:" in message.text:
+        if "Этот промокод был сгенерирован ботом" in message.text and "Пиши в боте:" in message.text:
             promo_start = message.text.index("Промо ") + len("Промо ") # находим начало промокода
             promo_end = message.text.index("\n", promo_start) # находим конец промокода
             promo_code = message.text[promo_start:promo_end] # извлекаем код из сообщения
