@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 6)
+__version__ = (0, 5, 7)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -187,7 +187,7 @@ class MineEVO(loader.Module):
         
         # если аргументов нет
         if not args:
-            utils.answer(message, 'ошибка')
+            await utils.answer(message, 'введите аргументы: .mevoperevod <кол-во лимитов> <ник чела в боте>')
             return
 
         logger.debug("starting to transfer limits...")
