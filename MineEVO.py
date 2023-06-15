@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (0, 5, 7)
+__version__ = (0, 5, 8)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -202,7 +202,7 @@ class MineEVO(loader.Module):
                     await self.client.send_message(self._mineevo_channel, "Вы остановили перевод лимитов!")
                     return
             # и по завершению, отправляется сообщение, в котором говорится, что все лимиты переведены
-            await self.client.send_message(chat=self._mineevo_channel, message='Все лимиты переведены!')
+            await self.client.send_message(self._mineevo_channel, 'Все лимиты переведены!')
 
     # .mevoautobonus
     @loader.command()
