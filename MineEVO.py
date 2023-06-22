@@ -73,9 +73,7 @@ class MineEVO(loader.Module):
         )
 
 
-        self.config["autobonus_status"] = False
-        self.config["mine_status"] = False
-        self.config["autosell_status"] = False
+
 
     # функция, связанная с ООП и нужная для создания конфига
     def __init__(self):
