@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (1, 0, 0)
+__version__ = (1, 0, 1)
 # meta developer: @sqlmerr_m
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/mineevo.png
 # only hikka
@@ -296,7 +296,7 @@ class MineEVO(loader.Module):
             await self.client.send_message(self._mineevo_channel, f'Промо {promo_code}')
 
             logger.debug("было введено промо")
-        if self.config["autothx_status"] and message.chat_id == 5522271758:
+        elif self.config["autothx_status"] and message.chat_id == 5522271758:
             if "(Используй команду Thx чтобы поблагодарить и получить бонус)" in message.raw_text:
                 self.client.send_message(self._mineevo_channel, "thx")
 
