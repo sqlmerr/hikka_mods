@@ -9,7 +9,7 @@
 # Description: Модуль для анимации вашего профиля (имя, био)
 # Author: sqlmerr
 # Commands:
-# .animatedname (.aname) | .animatedbio (.abio) | .animationconstructor (.aconstructor)
+# .animatedname (.aname) | .animatedbio (.abio) | .animatedstopname (.astopname) | .animatedstopbio (.astopbio)
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
