@@ -80,6 +80,7 @@ class AnimatedProfile(loader.Module):
     async def animatedname(self, message: Message):
         """(aname) Включить анимацию имени"""
         if not self.aname:
+            self.aname = True
             await message.delete()
             while self.aname:
                 if self.aname:
@@ -97,6 +98,7 @@ class AnimatedProfile(loader.Module):
     async def animatedbio(self, message: Message):
         """(abio) Включить анимацию био"""
         if not self.abio:
+            self.abio = True
             await message.delete()
             while self.abio:
                 if self.abio:
