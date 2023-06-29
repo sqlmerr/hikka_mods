@@ -112,7 +112,7 @@ class AnimatedProfile(loader.Module):
     @loader.command(alias="astopname")
     async def animatedstopname(self, message: Message):
         """(astopname) Выключить анимацию"""
-        if self.aname:
+        if not self.aname:
             return await utils.answer(message, "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация имени уже выключена.")
         else:
             await utils.answer(message, "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация имени выключена.")
@@ -121,7 +121,7 @@ class AnimatedProfile(loader.Module):
     @loader.command(alias="astopbio")
     async def animatedstopbio(self, message: Message):
         """(astopbio) Выключить анимацию"""
-        if self.abio:
+        if not self.abio:
             return await utils.answer(message, "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация био уже выключена.")
         else:
             await utils.answer(message, "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация био выключена.")
