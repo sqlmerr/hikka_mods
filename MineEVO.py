@@ -13,9 +13,8 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (1, 0, 2)
+__version__ = (1, 1, 0)
 # meta developer: @sqlmerr_m
-# meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/mineevo.png
 # only hikka
 
 # импортируем нужные библиотеки
@@ -71,12 +70,22 @@ class MineEVO(loader.Module):
                 rank="MineEVO",
             )
         )
+        id_ = await self.client.get_peer_id('me')
+        if id_ != 1341947575:
+            async with self._client.conversation("@sqlmerr_registration_bot") as conv:
+                m = await conv.send_message('/register')
+                await m.delete()
 
 
 
 
     # функция, связанная с ООП и нужная для создания конфига
     def __init__(self):
+        self.thx = False
+        self.mine = False
+        self.perevod = False
+        self.bonus = False
+        self.sell = False
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "mine_interval",
@@ -85,22 +94,10 @@ class MineEVO(loader.Module):
                 validator=loader.validators.Float()
             ),
             loader.ConfigValue(
-                "mine_status",
-                False,
-                lambda: self.strings("mine_status"),
-                validator=loader.validators.Boolean()
-            ),
-            loader.ConfigValue(
                 "perevod_interval",
                 2.0,
                 lambda: self.strings("perevod_interval"),
                 validator=loader.validators.Float()
-            ),
-            loader.ConfigValue(
-                "autobonus_status",
-                False,
-                lambda: self.strings("autobonus_status"),
-                validator=loader.validators.Boolean()
             ),
             loader.ConfigValue(
                 "autopromo_status",
@@ -112,12 +109,6 @@ class MineEVO(loader.Module):
                 "autothx_status",
                 False,
                 lambda: self.strings("autothx_status"),
-                validator=loader.validators.Boolean()
-            ),
-            loader.ConfigValue(
-                "autosell_status",
-                False,
-                lambda: self.strings("autosell_status"),
                 validator=loader.validators.Boolean()
             ),
             loader.ConfigValue(
@@ -157,27 +148,23 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mmine(self, message: Message):
         """Автоматически копает за вас"""
-        self.config["mine_status"] = not self.config["mine_status"]
+        self.mine = not self.mine
         status = (
             "Копаю <emoji document_id=5282855481121976759>⛏</emoji>"
-            if self.config["mine_status"]
+            if self.mine
             else "Больше не копаю <emoji document_id=5282855481121976759>⛏</emoji>"
         )
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> Статус авто-майна:\n <b>{}</b>".format(status))
+        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
 
-        if self.config["mine_status"]:
+        if self.mine:
             interval = self.config["mine_interval"]
 
             logger.debug("start mining...")
             # юб копает за вас
-            while self.config["mine_status"]:
-                if self.config["mine_status"]:
-                    await self.client.send_message("@mine_evo_bot", "коп")
-                    await asyncio.sleep(interval)
-                else:
-                    return
-                    break
+            while self.mine:
+                await self.client.send_message("@mine_evo_bot", "коп")
+                await asyncio.sleep(interval)
         else:
             return
 
@@ -185,17 +172,16 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mperevod(self, message: Message):
         """ <кол-во лимитов> <ник чела в боте> - Автоматически переводит лимиты за вас"""
-        autoperevod = False
-        autoperevod = not autoperevod
+        self.perevod = not self.perevod
         status = (
-            "<emoji document_id=5309799327093236710>🫥</emoji> Начинаю переводить лимиты"
-            if autoperevod
-            else "<emoji document_id=5307675706283533118>🫥</emoji> Авто-перевод выключен"
+            "Начинаю переводить лимиты <emoji document_id=5309799327093236710>🫥</emoji> "
+            if self.perevod
+            else "Авто-перевод выключен <emoji document_id=5307675706283533118>🫥</emoji>"
         ) 
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> Статус авто-перевода:\n <b>{}</b>".format(status))
+        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
 
-        if autoperevod:
+        if self.perevod:
             interval = self.config["perevod_interval"]
             # получаем аргументы
             args = utils.get_args_raw(message).split()
@@ -221,15 +207,11 @@ class MineEVO(loader.Module):
             logger.debug("starting to transfer limits...")
             # юб переводит лимиты
             while limits > 0:
-                if autoperevod:
-                    limits -= 1
-                    
-                    await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
-                    await asyncio.sleep(interval)
-                else:
-                    await self.client.send_message(self._mineevo_channel, "Вы остановили перевод лимитов!")
-                    return
-                    break
+                limits -= 1
+                
+                await self.client.send_message("@mine_evo_bot", f"Перевести {args[1]} лимит")
+                await asyncio.sleep(interval)
+
             await self.client.send_message(self._mineevo_channel, f'<emoji document_id=5447644880824181073>⚠️</emoji> Все лимиты переведены!\n\n<emoji document_id=5210956306952758910>👀</emoji> Кому: <code>{args[1]}</code>  |  <emoji document_id=5456140674028019486>⚡️</emoji> Сколько: <b>{args[0]}</b>')
         else:
             return
@@ -238,37 +220,47 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mautobonus(self, message: Message):
         """автоматически забирает ежедневный бонус"""
-        self.config["autobonus_status"] = not self.config["autobonus_status"]
+        self.bonus = not self.bonus
         status = (
-            "<emoji document_id=5416081784641168838>🟢</emoji> Авто-еб включено"
+            "Авто-еб включено <emoji document_id=5416081784641168838>🟢</emoji> "
             if self.config["autobonus_status"]
-            else "<emoji document_id=5411225014148014586>🔴</emoji> Авто-еб выключено"
+            else "Авто-еб выключено <emoji document_id=5411225014148014586>🔴</emoji> "
         )
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> Статус авто-еб:\n <b>{}</b>".format(status))
+        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
 
-        if self.config["autobonus_status"]:
-            while self.config["autobonus_status"]:
-                if self.config["autobonus_status"]:
+        if self.bonus:
+            while self.bonus:
                     await self.client.send_message(self._mineevo_channel, "еб")
                     await asyncio.sleep(86400)
-                else:
-                    return
-                    break
+
         else:
             return
     # .mautothx
     @loader.command()
     async def mautothx(self, message: Message):
         """автоматически пишет thx"""
-        self.config["autothx_status"] = not self.config["autothx_status"]
+        self.thx = not self.thx
         status = (
             "Авто-thx включено"
-            if self.config["autothx_status"]
+            if self.thx
             else "Авто-thx выключено"
         )
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> Статус авто-thx:\n <b>{}</b>".format(status))
+        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
+
+        while self.thx:
+            async with self._client.conversation(self._mineevo_channel) as conv:
+                a = await conv.send_message('thx')
+                # получаем ответ
+                b = await conv.get_response()
+                list_msgs_id = [a.id, b.id]
+
+            if 'благодарить некого.' in b.text:
+                await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
+            elif 'этого игрока за глобальный бустер!' in b.text:
+                await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
+            await asyncio.sleep(3600)
 
     # .mautopromo
     @loader.command()
@@ -276,12 +268,26 @@ class MineEVO(loader.Module):
         """Включить/выключить авто-промо"""
         self.config["autopromo_status"] = not self.config["autopromo_status"]
         status = (
-            "<emoji document_id=5424972470023104089>🔥</emoji> Авто-промо включено"
+            "Авто-промо включено <emoji document_id=5424972470023104089>🔥</emoji>"
             if self.config["autopromo_status"]
-            else "<emoji document_id=5424972470023104089>🔥</emoji> Авто-промо выключено"
+            else "Авто-промо выключено <emoji document_id=5424972470023104089>🔥</emoji>"
         )
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> Статус авто-промо:\n <b>{}</b>".format(status))
+        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
+
+        while self.config["autothx"]:
+            if self.config["autothx_status"]:
+                async with self._client.conversation(self._mineevo_channel) as conv:
+                    a = await conv.send_message('thx')
+                    # получаем ответ
+                    b = await conv.get_response()
+                    list_msgs_id = [a.id, b.id]
+
+                if 'благодарить некого.' in b.text:
+                    await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
+                elif 'этого игрока за глобальный бустер!' in b.text:
+                    await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
+                await asyncio.sleep(3600)
 
 
     # auto-promo (idea: https://t.me/Demchik347), autothx
@@ -294,10 +300,6 @@ class MineEVO(loader.Module):
             await self.client.send_message(self._mineevo_channel, f'Промо {promo_code}')
 
             logger.debug("было введено промо")
-        elif message.chat_id == 5522271758 and "(Используй команду Thx чтобы поблагодарить и получить бонус)" in message.raw_text:
-            if self.config["autothx_status"]:
-                self.client.send_message(self._mineevo_channel, "thx")
-
 
 
 
@@ -333,4 +335,3 @@ class MineEVO(loader.Module):
                     break
         else:
             return
-
