@@ -307,31 +307,26 @@ class MineEVO(loader.Module):
     @loader.command()
     async def mautosell(self, message: Message):
         """Включить/выключить авто-продажу"""
-        self.config["autosell_status"] = not self.config["autosell_status"]
+        self.sell = not self.sell
         status = (
-            "<emoji document_id=5409048419211682843>💲</emoji> Авто-продажа включена"
-            if self.config["autosell_status"]
-            else "<emoji document_id=5409048419211682843>💲</emoji> Авто-продажа выключена"
+            "Авто-продажа включена <emoji document_id=5409048419211682843>💲</emoji> "
+            if self.sell
+            else "Авто-продажа выключена <emoji document_id=5409048419211682843>💲</emoji> "
         )
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> Статус авто-продажи:\n <b>{}</b>".format(status))
-        self.config["autosell_status"]
-        if self.config["autosell_status"]:
-            while self.config["autosell_status"]:
-                if self.config["autosell_status"]:
-                    async with self._client.conversation(self._mineevo_channel) as conv:
-                        if self.config["autoboost_status"]:
-                            o = await conv.send_message("буст д 1.5")
-                            oo = await conv.get_response()
-                        a = await conv.send_message('инв')
-                        # получаем ответ
-                        b = await conv.get_response()
-                        list_msgs_id = [a.id, b.id]
-                    await b.click(0)
-                    await asyncio.sleep(605)
-                    await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
-                else:
-                    return
-                    break
+        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
+        if self.sell:
+            while self.sell:
+                async with self._client.conversation(self._mineevo_channel) as conv:
+                    if self.config["autoboost_status"]:
+                        o = await conv.send_message("буст д 1.5")
+                        oo = await conv.get_response()
+                    a = await conv.send_message('инв')
+                    # получаем ответ
+                    b = await conv.get_response()
+                    list_msgs_id = [a.id, b.id]
+                await b.click(0)
+                await asyncio.sleep(605)
+                await self.client.delete_messages(entity=self._mineevo_channel, message_ids=list_msgs_id)
         else:
             return
