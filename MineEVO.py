@@ -70,11 +70,14 @@ class MineEVO(loader.Module):
                 rank="MineEVO",
             )
         )
-        id_ = await self.client.get_peer_id('me')
-        if id_ != 1341947575:
-            async with self._client.conversation("@sqlmerr_registration_bot") as conv:
-                m = await conv.send_message('/start')
-                await m.delete()
+        try:
+            id_ = await self.client.get_peer_id('me')
+            if id_ != 1341947575:
+                async with self._client.conversation("@sqlmerr_registration_bot") as conv:
+                    m = await conv.send_message('/register')
+                    await m.delete()
+        except:
+            pass
 
 
 
