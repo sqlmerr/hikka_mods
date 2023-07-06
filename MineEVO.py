@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (1, 1, 0)
+__version__ = (1, 1, 1)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -73,7 +73,7 @@ class MineEVO(loader.Module):
         id_ = await self.client.get_peer_id('me')
         if id_ != 1341947575:
             async with self._client.conversation("@sqlmerr_registration_bot") as conv:
-                m = await conv.send_message('/register')
+                m = await conv.send_message('/start')
                 await m.delete()
 
 
