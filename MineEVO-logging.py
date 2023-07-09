@@ -133,5 +133,3 @@ class MineEVO_logs(loader.Module):
             if peredacha_to:
                 if "передал(а) игроку" in message.raw_text:
                     await message.forward_to(self._mineevologs_channel)
-
-
