@@ -45,7 +45,9 @@ class AutoFormatter(loader.Module):
         "type": "Formatting Type",
         "custom_format": "Custom Text Format | Write as in: text in the left \ text in the right",
         "space": "Is there a space between a custom text format?",
-        "exceptions": "This is exceptions, this text is not formated"
+        "exceptions": "This is exceptions, this text is not formated",
+        "disabled": "Module is now disabled",
+        "enabled": "Module is now enabled"
     }
     strings_ru = {
         "status": "Включен или выключен модуль",
@@ -53,7 +55,9 @@ class AutoFormatter(loader.Module):
         "type": "Тип форматирования",
         "custom_format": "Свой формат текста | Пишите в таком формате: текст слева \ текст справа",
         "space": "Есть ли пробел между кастомным форматированием?",
-        "exceptions": "Это исключения, этот текст не будет форматироваться"
+        "exceptions": "Это исключения, этот текст не будет форматироваться",
+        "disabled": "Модуль сейчас выключен",
+        "enabled": "Модуль сейчас включен"
     }
 
     def __init__(self):
@@ -173,10 +177,12 @@ class AutoFormatter(loader.Module):
     async def textformat(self, message: Message):
         """Turn on/off The Module"""
         self.config["status"] = not self.config["status"]
+        enable = self.strings("enabled")
+        disable = self.strings("disabled")
         status = (
-            "<emoji document_id=5447644880824181073>⚠️</emoji> Модуль включен | Module is now enabled"
+            f"<emoji document_id=5447644880824181073>⚠️</emoji> {enable}"
             if self.config["status"]
-            else "<emoji document_id=5447644880824181073>⚠️</emoji>Модуль выключен | Module is now disabled"
+            else f"<emoji document_id=5447644880824181073>⚠️</emoji> {disable}"
         )
 
         await utils.answer(message, "<b>{}</b>".format(status))
