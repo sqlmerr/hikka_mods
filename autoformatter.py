@@ -131,6 +131,9 @@ class AutoFormatter(loader.Module):
                     if exc != [None]:
                         if f in text or exc in text:
                             return
+                        for e in exc:
+                            if e in text:
+                                return
                     else:
                         if f in text:
                             return
