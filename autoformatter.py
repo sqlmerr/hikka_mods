@@ -153,8 +153,9 @@ class AutoFormatter(loader.Module):
                     if exc != [None]:
                         if o in text or oo in text or exc in text:
                             return
-                        if text in exc:
-                            return
+                        for e in exc:
+                            if e in text:
+                                return
                     else:
                         if o in text or oo in text:
                             return
