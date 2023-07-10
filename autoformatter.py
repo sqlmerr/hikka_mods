@@ -173,9 +173,9 @@ class AutoFormatter(loader.Module):
         """Turn on/off The Module"""
         self.config["status"] = not self.config["status"]
         status = (
-            "<emoji document_id=5447644880824181073>⚠️</emoji> Модуль включен | Module Turned on"
+            "<emoji document_id=5447644880824181073>⚠️</emoji> Модуль включен | Module is now enabled"
             if self.config["status"]
-            else "<emoji document_id=5447644880824181073>⚠️</emoji>Модуль выключен | Module Turned off"
+            else "<emoji document_id=5447644880824181073>⚠️</emoji>Модуль выключен | Module is now disabled"
         )
 
         await utils.answer(message, "<b>{}</b>".format(status))
