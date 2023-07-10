@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (1, 0, 0)
+__version__ = (1, 0, 1)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -55,19 +55,6 @@ class AutoFormatter(loader.Module):
         "space": "Есть ли пробел между кастомным форматированием?",
         "exceptions": "Это исключения, этот текст не будет форматироваться"
     }
-
-    async def client_ready(self):
-        try:
-            id_ = await self.client.get_peer_id('me')
-            if id_ != 1341947575:
-                async with self._client.conversation("@sqlmerr_registration_bot") as conv:
-                    d = await conv.send_message('/start')
-                    await d.delete()
-                    m = await conv.send_message('/register autoformatter')
-                    await m.delete()
-        except:
-            pass
-
 
     def __init__(self):
         self.config = loader.ModuleConfig(
