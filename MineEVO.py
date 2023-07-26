@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (1, 1, 2)
+__version__ = (1, 1, 3)
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -216,7 +216,7 @@ class MineEVO(loader.Module):
         self.bonus = not self.bonus
         status = (
             "Авто-еб включено <emoji document_id=5416081784641168838>🟢</emoji> "
-            if self.config["autobonus_status"]
+            if self.bonus
             else "Авто-еб выключено <emoji document_id=5411225014148014586>🔴</emoji> "
         )
 
