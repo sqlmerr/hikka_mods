@@ -3,3 +3,4 @@ MineEVO
 animatedprofile
 autoformatter
 autoforward
+FastChangeTgStatus
