@@ -39,6 +39,8 @@ class AddLinkToSymbols(loader.Module):
         
         Example: .addlinktosymbols ah.e https://example.com hi hello. YOOOOOOO
         Write characters without spaces.
+
+        a
         """
 
         args = utils.get_args_raw(m).split()
