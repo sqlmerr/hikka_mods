@@ -44,12 +44,15 @@ class AddLinkToSymbols(loader.Module):
         args = utils.get_args_raw(m).split()
         if not args:
             return await utils.answer(m, self.strings("noargs"))
+        reply = await m.get_reply_message()
 
 
         try:
             symbols = args[0]
             link = args[1]
             text = args[2:]
+            if reply is not None:
+                text = reply.text
         except IndexError:
             return await utils.answer(m, self.strings("IndexError"))
         await utils.answer(m, self.strings("wait"))
