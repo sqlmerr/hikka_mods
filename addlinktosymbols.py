@@ -52,7 +52,7 @@ class AddLinkToSymbols(loader.Module):
             link = args[1]
             text = args[2:]
             if reply is not None:
-                text = reply.text
+                text = reply.raw_text
         except IndexError:
             return await utils.answer(m, self.strings("IndexError"))
         await utils.answer(m, self.strings("wait"))
