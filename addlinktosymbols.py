@@ -60,7 +60,8 @@ class AddLinkToSymbols(loader.Module):
         for t in text:
             if reply:
                 txt += t
-            txt += t + " "
+            else:
+                txt += t + " "
         
         real_txt = ""
         for _ in range(len(txt)):
