@@ -58,6 +58,8 @@ class AddLinkToSymbols(loader.Module):
         await utils.answer(m, self.strings("wait"))
         txt = ""
         for t in text:
+            if reply:
+                txt += t
             txt += t + " "
         
         real_txt = ""
