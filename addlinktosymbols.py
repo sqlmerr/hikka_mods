@@ -7,6 +7,7 @@
 ╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝
 """
 # meta developer: @sqlmerr_m
+# meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/sqlmerrmodules_example.png?raw=true
 
 import asyncio
 from telethon.tl.types import Message
