@@ -32,10 +32,10 @@ class AddLinkToSymbols(loader.Module):
         "none": "<emoji document_id=5210952531676504517>❌</emoji> <b>ОШИБКА</b>"
     }
 
-    @loader.command(ru_doc="[символы] [ссылка] [текст] Добавить ссылку на символы\n\nПример: .addlinktosymbols ап.ев https://example.com привет. Еееее хай\nСимволы пишите без пробелов. ")
+    @loader.command(ru_doc="[символы] [ссылка] [текст или реплай] Добавить ссылку на символы\n\nПример: .addlinktosymbols ап.ев https://example.com привет. Еееее хай\nСимволы пишите без пробелов. ")
     async def addlinktosymbols(self, m: Message):
         """
-        [symbols] [link] [text] Add link to symbols
+        [symbols] [link] [text or reply] Add link to symbols
         
         Example: .addlinktosymbols ah.e https://example.com hi hello. YOOOOOOO
         Write characters without spaces.
