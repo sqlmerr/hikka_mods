@@ -6,3 +6,4 @@ autoforward
 FastChangeTgStatus
 addlinktosymbols
 numbersfacts
+inlinetimer
