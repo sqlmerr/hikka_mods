@@ -27,14 +27,16 @@ class InlineTimer(loader.Module):
                  "⏰ <i>Current time</i>: {} seconds"),
         "successful": "Great, in {} seconds the inline bot will send you a message via PM",
         "timer_created": "<b>Timer created!</b>",
-        "text_cfg": "The text that your inline bot will send when the timer expires"
+        "text_cfg": "The text that your inline bot will send when the timer expires",
+        "below_zero": "Time cannot be below zero"
     }
     strings_ru = {
         "text": ("⏲ <b>Inline timer</b>\n"
                  "⏰ <i>Текущее время</i>: {} секунд"),
         "successful": "Отлично, через {} секунд инлайн бот отправит вам сообщение в лс",
         "timer_created": "<b>Таймер создан!</b>",
-        "text_cfg": "Текст, который будет писать ваш инлайн бот по истечению времени таймера"
+        "text_cfg": "Текст, который будет писать ваш инлайн бот по истечению времени таймера",
+        "below_zero": "Время не может быть меньше нуля"
     }
 
     def __init__(self):
@@ -97,7 +99,7 @@ class InlineTimer(loader.Module):
     async def decrement(self, call: InlineCall):
         timer = self.get("timer", 0)
         if timer == 0:
-            await call.answer("Timer can't be below zero")
+            await call.answer(self.strings("below_zero"))
             return
         timer -= 1
         self.set("timer", timer)
