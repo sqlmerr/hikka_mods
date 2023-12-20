@@ -98,7 +98,7 @@ class AutoFormatter(loader.Module):
             text = message.text
             if exc != [None]:
                 for e in exc:
-                    if e == text:
+                    if str(e).strip() == text.strip():
                         return
             else:
                 if f in text:
