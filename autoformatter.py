@@ -13,7 +13,7 @@
 # ---------------------------------------------------------------------------------------------
 
 # версия модуля
-__version__ = (1, 0, 1)
+# meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_autoformatter.png?raw=true
 # meta developer: @sqlmerr_m
 # only hikka
 
@@ -36,25 +36,21 @@ logger = logging.getLogger(__name__)
 # сам класс модуля
 @loader.tds
 class AutoFormatter(loader.Module):
-    """Automatically formats the text of your messages | Автоматически форматирует текст ваших сообщений | Check The Config | Загляните в конфиг"""
+    """Automatically formats the text of your messages | Check The Config"""
     # нужные переменные
     strings = {
         "name": "AutoFormatter",
         "status": "Module enabled or disabled",
-        "format": "Text Format",
+        "format": "Text format. Where {} is the original message text",
         "type": "Formatting Type",
-        "custom_format": "Custom Text Format | Write as in: text in the left \ text in the right",
-        "space": "Is there a space between a custom text format?",
         "exceptions": "This is exceptions, this text is not formated",
         "disabled": "Module is now disabled",
         "enabled": "Module is now enabled"
     }
     strings_ru = {
         "status": "Включен или выключен модуль",
-        "format": "Формат текста",
+        "format": "Формат текста. Где {} это исходный текст сообщения",
         "type": "Тип форматирования",
-        "custom_format": "Свой формат текста | Пишите в таком формате: текст слева \ текст справа",
-        "space": "Есть ли пробел между кастомным форматированием?",
         "exceptions": "Это исключения, этот текст не будет форматироваться",
         "disabled": "Модуль сейчас выключен",
         "enabled": "Модуль сейчас включен"
@@ -70,9 +66,17 @@ class AutoFormatter(loader.Module):
             ),
             loader.ConfigValue(
                 "format",
-                'Bold',
+                '<b>{}</b>',
                 lambda: self.strings("format"),
-                validator=loader.validators.Choice(["Bold", "Mono", "Italic", "Custom"])
+                validator=loader.validators.String()
+            ),
+            loader.ConfigValue(
+                "exceptions",
+                [],
+                lambda: self.strings("exceptions"),
+                validator=loader.validators.Series(
+                    loader.validators.String()
+                )
             ),
             loader.ConfigValue(
                 "type",
@@ -80,100 +84,35 @@ class AutoFormatter(loader.Module):
                 lambda: self.strings("type"),
                 validator=loader.validators.Choice(["send_new", "edit"])
             ),
-            loader.ConfigValue(
-                "custom_format",
-                None,
-                lambda: self.strings("custom_format"),
-                validator=loader.validators.String()
-            ),
-            loader.ConfigValue(
-                "space",
-                True,
-                lambda: self.strings("space"),
-                validator=loader.validators.Boolean()
-            ),
-            loader.ConfigValue(
-                "exceptions",
-                [None],
-                lambda: self.strings("exceptions"),
-                validator=loader.validators.Union(
-                    loader.validators.String(), loader.validators.NoneType()
-                )
-            ),
         )
 
     @loader.watcher(only_messages=True, no_commands=True, no_stickers=True, no_docs=True, no_audios=True, no_videos=True, no_photos=True, no_forwards=True)
     async def watcher(self, message):
-        if self.config["status"]:
-            ss = False
-            id_ = await self.client.get_peer_id('me')
-            if self.config["format"] == "Bold":
-                o, oo = "<b>", "</b>"
-            elif self.config["format"] == "Mono":
-                o, oo = "<code>", "</code>"
-            elif self.config["format"] == "Italic":
-                o, oo = "<i>", "</i>"
-            elif self.config["format"] == "Custom":
-                ss = True
-            else:
-                return
+        if not self.config["status"]:
+            return
             
-            reply = await message.get_reply_message()
-
-            exc = self.config["exceptions"]
-            if message.from_id == id_:
-                if ss:
-                    f = self.config["custom_format"].split(" \ ")[0]
-                    ff = self.config["custom_format"].split(" \ ")[1]
-                    if f is None:
+        reply = await message.get_reply_message()
+        exc = self.config["exceptions"]
+        if message.from_id == self._tg_id:
+            f = self.config["format"]
+            text = message.text
+            if exc != [None]:
+                for e in exc:
+                    if e == text:
                         return
-                    text = message.text
-                    if exc != [None]:
-                        if f in text or exc in text:
-                            return
-                        for e in exc:
-                            if e in text:
-                                return
-                    else:
-                        if f in text:
-                            return
+            else:
+                if f in text:
+                    return
 
-                    if self.config["type"] == 'send_new':
-                        await message.delete()
-                        if self.config["space"]:
-                            if reply:
-                                await self.client.send_message(message.to_id, f"{f} {text} {ff}", reply_to=reply)
-                            else:
-                                await self.client.send_message(message.to_id, f"{f} {text} {ff}")
-                        else:
-                            if reply:
-                                await self.client.send_message(message.to_id, f"{f}{text}{ff}", reply_to=reply)
-                            else:
-                                await self.client.send_message(message.to_id, f"{f}{text}{ff}")
-                    elif self.config["type"] == 'edit':
-                        if self.config["space"]:
-                            await utils.answer(message, f"{f} {text} {ff}")
-                        else:
-                            await utils.answer(message, f"{f}{text}{ff}")
+            if self.config["type"] == 'send_new':
+                await message.delete()
+                if reply:
+                    await self.client.send_message(message.to_id, f"{f.format(text)}", reply_to=reply)
                 else:
-                    text = message.text
-                    if exc != [None]:
-                        if o in text or oo in text or exc in text:
-                            return
-                        for e in exc:
-                            if e in text:
-                                return
-                    else:
-                        if o in text or oo in text:
-                            return
-                    if self.config["type"] == 'send_new':
-                        await message.delete()
-                        if reply:
-                            await self.client.send_message(message.to_id, f"{o}{text}{oo}", reply_to=reply)
-                        else:
-                            await self.client.send_message(message.to_id, f"{o}{text}{oo}")
-                    elif self.config["type"] == 'edit':
-                        await utils.answer(message, f"{o}{text}{oo}")
+                    await self.client.send_message(message.to_id, f"{f.format(text)}")
+            elif self.config["type"] == 'edit':
+                await utils.answer(message, f"{f.format(text)}")
+
 
 
     @loader.command(ru_doc="Включить/выключить модуль")
