@@ -10,6 +10,7 @@
 
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_triggers.png?raw=true
 # meta developer: @sqlmerr_m
+# requires: cachetools
 
 import uuid
 import asyncio
@@ -18,6 +19,8 @@ import json
 
 from .. import loader, utils
 from hikkatl.tl.types import Message
+
+from cachetools import TTLCache
 
 
 @loader.tds
@@ -28,6 +31,7 @@ class Triggers(loader.Module):
         "name": "Triggers",
         "_cfg_status": "module working or not",
         "_cfg_allow_invoke": "can triggers run ANY userbot commands?",
+        "_cfg_throttle_time": "cooldown between trigger executions",
         "no_reply": "<emoji document_id=5210952531676504517>❌</emoji> No reply!",
         "no_args": "<emoji document_id=5210952531676504517>❌</emoji> No args!",
         "text_add": (
@@ -51,6 +55,7 @@ class Triggers(loader.Module):
     strings_ru = {
         "_cfg_status": "Модуль работает или нет",
         "_cfg_allow_invoke": "могут ли триггеры запускать ЛЮБЫЕ команды юзербота?",
+        "_cfg_throttle_time": "Кд между выполнением триггеров. Для применения изменений требуется перезагрузить модуль/юзербота",
         "no_reply": "<emoji document_id=5210952531676504517>❌</emoji> Нет реплая!",
         "no_args": "<emoji document_id=5210952531676504517>❌</emoji> Нет аргументов!",
         "text_add": (
@@ -86,8 +91,16 @@ class Triggers(loader.Module):
 				False,
 				lambda: self.strings("_cfg_allow_invoke"),
 				validator=loader.validators.Boolean()
-			)
+			),
+			loader.ConfigValue(
+				"throttle_time",
+				1.0,
+				lambda: self.strings("_cfg_throttle_time"),
+				validator=loader.validators.Float(minimum=0)
+			),
 		)
+        
+        self.cache = TTLCache(maxsize=10_000, ttl=float(self.config["throttle_time"]))
     
     
     @loader.command(ru_doc="[текст, на который будет тригеррится модуль] <реплай на текст ответа> - Добавить базовый триггер", alias="tbaseadd")
@@ -302,6 +315,12 @@ class Triggers(loader.Module):
                 t.append(trigger)
         
         for trigger in t:
+            if trigger["id"] in self.cache:
+                continue
+            else:
+                self.cache[trigger["id"]] = None
+
+            
             action_type = trigger["action"]["type"]
             if trigger["delay"] != 0:
                 await asyncio.sleep(trigger["delay"]) 
