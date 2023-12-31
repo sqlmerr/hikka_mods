@@ -290,8 +290,9 @@ class Triggers(loader.Module):
         if not message.text:
             return
         
-        if getattr(message, "chat") and message.chat.id not in self.get("chats", []):
+        if not getattr(message, "chat") or (getattr(message, "chat") and message.chat.id not in self.get("chats", [])):
             return
+        
         
         triggers = self.get("triggers", [])
         if not triggers:
