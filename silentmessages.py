@@ -78,7 +78,7 @@ class SilentMessages(loader.Module):
             return
 
         if (
-            (getattr(message, "sender") and message.chat.id in self.config["chats"])
+            (getattr(message, "chat") and message.chat.id in self.config["chats"])
             or (
                 getattr(message, "sender") and message.sender.id in self.config["chats"]
             )
