@@ -78,9 +78,9 @@ class SilentMessages(loader.Module):
             return
 
         if (
-            (getattr(message, "chat") and message.chat.id in self.config["chats"])
+            (getattr(message, "chat", None) and message.chat.id in self.config["chats"])
             or (
-                getattr(message, "sender") and message.sender.id in self.config["chats"]
+                getattr(message, "sender", None) and message.sender.id in self.config["chats"]
             )
         ) and message.silent is True:
             link = await utils.get_message_link(message)
