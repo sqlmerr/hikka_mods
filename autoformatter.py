@@ -77,13 +77,7 @@ class AutoFormatter(loader.Module):
                 validator=loader.validators.Series(
                     loader.validators.String()
                 )
-            ),
-            loader.ConfigValue(
-                "type",
-                'send_new',
-                lambda: self.strings("type"),
-                validator=loader.validators.Choice(["send_new", "edit"])
-            ),
+            )
         )
 
     @loader.watcher(only_messages=True, no_commands=True, no_stickers=True, no_docs=True, no_audios=True, no_videos=True, no_photos=True, no_forwards=True)
@@ -104,14 +98,7 @@ class AutoFormatter(loader.Module):
                 if f in text:
                     return
 
-            if self.config["type"] == 'send_new':
-                await message.delete()
-                if reply:
-                    await self.client.send_message(message.to_id, f"{f.format(text)}", reply_to=reply)
-                else:
-                    await self.client.send_message(message.to_id, f"{f.format(text)}")
-            elif self.config["type"] == 'edit':
-                await utils.answer(message, f"{f.format(text)}")
+            await utils.answer(message, f"{f.format(text)}")
 
 
 
