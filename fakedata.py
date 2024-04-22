@@ -32,6 +32,7 @@ class FakeData(loader.Module):
             "  phone - {phone}\n"
             "  birthday - {birthday}\n"
             "  gender - {gender}\n"
+            "  ip - {ip}\n"
             "  address - {address}\n\n"
         ),
         "credit_card_text": (
@@ -50,6 +51,7 @@ class FakeData(loader.Module):
             "  номер телефона - {phone}\n"
             "  дата рождения - {birthday}\n"
             "  пол - {gender}\n"
+            "  айпи - {ip}\n"
             "  адресс - {address}\n\n"
         ),
         "credit_card_text": (
@@ -70,6 +72,7 @@ class FakeData(loader.Module):
             phone=data["phone"],
             birthday=data["birthday"],
             gender=data["gender"],
+            ip=data["ip"],
             address=f'{address["country"]}, {address["city"]}, {address["street"]}',
         )
 
@@ -99,6 +102,11 @@ class FakeData(loader.Module):
                     await utils.answer(message, self.strings("error"))
                 data = await response.json()
                 card = data["data"][0]
+            async with session.get("/api/v1/users", params=params) as response:
+                if response.status != 200:
+                    await utils.answer(message, self.strings("error"))
+                data = await response.json()
+                person["ip"] = data["data"][0]["ip"]
 
         text = self.get_formatted_person_text(
             person
