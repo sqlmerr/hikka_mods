@@ -7,3 +7,9 @@ FastChangeTgStatus
 addlinktosymbols
 numbersfacts
 inlinetimer
+random_emoji
+silentmessages
+codeformat
+fakedata
+upgradedeval
+triggers
