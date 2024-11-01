@@ -97,7 +97,7 @@ class FakeData(loader.Module):
                     await utils.answer(message, self.strings("error"))
                 data = await response.json()
                 person = data["data"][0]
-            async with session.get("/api/v1/credit_cards", params=params) as response:
+            async with session.get("/api/v2/creditCards", params=params) as response:
                 if response.status != 200:
                     await utils.answer(message, self.strings("error"))
                 data = await response.json()
