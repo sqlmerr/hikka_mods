@@ -10,7 +10,6 @@
 # meta developer: @sqlmerr_m
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_codeformat.png?raw=true
 
-
 from .. import loader, utils
 
 from hikkatl.tl.types import Message
@@ -25,9 +24,7 @@ class CodeFormat(loader.Module):
     def __init__(self):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
-                "language",
-                "python",
-                validator=loader.validators.String()
+                "language", "python", validator=loader.validators.String()
             )
         )
 
@@ -37,6 +34,5 @@ class CodeFormat(loader.Module):
         language = self.config["language"]
 
         await utils.answer(
-            message,
-            f"<pre><code class='language-{language}'>{args}</code></pre>"
+            message, f"<pre><code class='language-{language}'>{args}</code></pre>"
         )

@@ -18,25 +18,23 @@
 # only hikka
 
 # импортируем нужные библиотеки
-import asyncio
 
-from telethon.tl.types import Message, ChatAdminRights
-from telethon import events, functions, types
+from telethon.tl.types import Message
 
 import logging
 
-import re
 
 from .. import loader, utils
 
 
-
 logger = logging.getLogger(__name__)
+
 
 # сам класс модуля
 @loader.tds
 class AutoFormatter(loader.Module):
     """Automatically formats the text of your messages | Check The Config"""
+
     # нужные переменные
     strings = {
         "name": "AutoFormatter",
@@ -45,7 +43,7 @@ class AutoFormatter(loader.Module):
         "type": "Formatting Type",
         "exceptions": "This is exceptions, this text is not formated",
         "disabled": "Module is now disabled",
-        "enabled": "Module is now enabled"
+        "enabled": "Module is now enabled",
     }
     strings_ru = {
         "status": "Включен или выключен модуль",
@@ -53,7 +51,7 @@ class AutoFormatter(loader.Module):
         "type": "Тип форматирования",
         "exceptions": "Это исключения, этот текст не будет форматироваться",
         "disabled": "Модуль сейчас выключен",
-        "enabled": "Модуль сейчас включен"
+        "enabled": "Модуль сейчас включен",
     }
 
     def __init__(self):
@@ -62,29 +60,36 @@ class AutoFormatter(loader.Module):
                 "status",
                 False,
                 lambda: self.strings("status"),
-                validator=loader.validators.Boolean()
+                validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
                 "format",
-                '<b>{}</b>',
+                "<b>{}</b>",
                 lambda: self.strings("format"),
-                validator=loader.validators.String()
+                validator=loader.validators.String(),
             ),
             loader.ConfigValue(
                 "exceptions",
                 [],
                 lambda: self.strings("exceptions"),
-                validator=loader.validators.Series(
-                    loader.validators.String()
-                )
-            )
+                validator=loader.validators.Series(loader.validators.String()),
+            ),
         )
 
-    @loader.watcher(only_messages=True, no_commands=True, no_stickers=True, no_docs=True, no_audios=True, no_videos=True, no_photos=True, no_forwards=True)
+    @loader.watcher(
+        only_messages=True,
+        no_commands=True,
+        no_stickers=True,
+        no_docs=True,
+        no_audios=True,
+        no_videos=True,
+        no_photos=True,
+        no_forwards=True,
+    )
     async def watcher(self, message):
         if not self.config["status"]:
             return
-            
+
         reply = await message.get_reply_message()
         exc = self.config["exceptions"]
         if message.from_id == self._tg_id:
@@ -99,8 +104,6 @@ class AutoFormatter(loader.Module):
                     return
 
             await utils.answer(message, f"{f.format(text)}")
-
-
 
     @loader.command(ru_doc="Включить/выключить модуль")
     async def textformat(self, message: Message):

@@ -1,27 +1,26 @@
 from hikkatl.types import Message
 from .. import loader, utils
 import requests
-import os
-import random
-import logging
 
 # meta developer: @sqlmerr_m
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_numberfacts.png?raw=true
 
+
 @loader.tds
 class NumbersFacts(loader.Module):
     """Interesting facts about numbers | Check the config"""
+
     strings = {
         "name": "NumbersFacts",
         "noargs": "<emoji document_id=5240241223632954241>🚫</emoji> <b>You didn't enter any arguments</b>",
         "indexerror": "<emoji document_id=5240241223632954241>🚫</emoji> <b>You have not entered enough arguments</b>",
-        "type": "Type of facts about numbers. Trivia is a fact from life, math is a mathematical fact, date and year is a question about a date"
+        "type": "Type of facts about numbers. Trivia is a fact from life, math is a mathematical fact, date and year is a question about a date",
     }
 
     string_ru = {
         "noargs": "<emoji document_id=5240241223632954241>🚫</emoji> <b>Вы не ввели аргументы</b>",
         "indexerror": "<emoji document_id=5240241223632954241>🚫</emoji> <b>Вы ввели недостаточно аргументов</b>",
-        "type": "Тип фактов о числах. Trivia — факт из жизни, math — математический факт, date и year — вопрос про дату"
+        "type": "Тип фактов о числах. Trivia — факт из жизни, math — математический факт, date и year — вопрос про дату",
     }
 
     def __init__(self):
@@ -30,7 +29,7 @@ class NumbersFacts(loader.Module):
                 "type",
                 "math",
                 lambda: self.strings("type"),
-                validator=loader.validators.Choice(["date", "math", "year", "trivia"])
+                validator=loader.validators.Choice(["date", "math", "year", "trivia"]),
             ),
         )
 
@@ -42,17 +41,16 @@ class NumbersFacts(loader.Module):
         number = args[0]
         _type = self.config["type"]
 
-
         url = f"http://numbersapi.com/{number}/{_type}"
         response = await utils.run_sync(requests.get, url)
         data = response.text
         await utils.answer(
-            message, 
+            message,
             await self._client.translate(
                 message.peer_id,
                 message,
-                to_lang = self._db.get("hikka.translations", "lang")[0:2],
-                raw_text = data,
-                entities = message.entities,
+                to_lang=self._db.get("hikka.translations", "lang")[0:2],
+                raw_text=data,
+                entities=message.entities,
             ),
         )

@@ -11,32 +11,29 @@
 
 import asyncio
 
-from telethon.tl.types import Message
-from telethon import functions
 
-from .. import loader, utils
-from ..inline.types import InlineCall, InlineQuery
+from .. import loader
+from ..inline.types import InlineCall
 
 
 @loader.tds
 class InlineTimer(loader.Module):
     """Описание нашего модуля"""
+
     strings = {
         "name": "InlineTimer",
-        "text": ("⏲ <b>Inline timer</b>\n"
-                 "⏰ <i>Current time</i>: {} seconds"),
+        "text": ("⏲ <b>Inline timer</b>\n" "⏰ <i>Current time</i>: {} seconds"),
         "successful": "Great, in {} seconds the inline bot will send you a message via PM",
         "timer_created": "<b>Timer created!</b>",
         "text_cfg": "The text that your inline bot will send when the timer expires",
-        "below_zero": "Time cannot be below zero"
+        "below_zero": "Time cannot be below zero",
     }
     strings_ru = {
-        "text": ("⏲ <b>Inline timer</b>\n"
-                 "⏰ <i>Текущее время</i>: {} секунд"),
+        "text": ("⏲ <b>Inline timer</b>\n" "⏰ <i>Текущее время</i>: {} секунд"),
         "successful": "Отлично, через {} секунд инлайн бот отправит вам сообщение в лс",
         "timer_created": "<b>Таймер создан!</b>",
         "text_cfg": "Текст, который будет писать ваш инлайн бот по истечению времени таймера",
-        "below_zero": "Время не может быть меньше нуля"
+        "below_zero": "Время не может быть меньше нуля",
     }
 
     def __init__(self):
@@ -45,7 +42,7 @@ class InlineTimer(loader.Module):
                 "text",
                 "⚠️",
                 lambda: self.strings("text_cfg"),
-                validator=loader.validators.String()
+                validator=loader.validators.String(),
             )
         )
 
@@ -67,34 +64,26 @@ class InlineTimer(loader.Module):
                         "input": "✍️ Enter new time IN SECONDS",
                         "handler": self.input_handler,
                     },
-                    {
-                        "text": "+1 sec",
-                        "callback": self.increment
-                    }
-                ],     
+                    {"text": "+1 sec", "callback": self.increment},
+                ],
                 [
-                    {
-                        "text": "✅",
-                        "callback": self.proceed   
-                    },
+                    {"text": "✅", "callback": self.proceed},
                     {
                         "text": "❌",
                         "action": "close",
-                    }
+                    },
                 ],
             ],
         )
-
 
     async def proceed(self, call: InlineCall):
         timer = self.get("timer", 1)
         await call.answer(self.strings("successful").format(timer))
         await call.edit(self.strings("timer_created"))
         self.set("timer", 0)
-        
+
         await asyncio.sleep(timer)
         await self.inline.bot.send_message(self.tg_id, self.config["text"])
-
 
     async def decrement(self, call: InlineCall):
         timer = self.get("timer", 0)
@@ -104,7 +93,7 @@ class InlineTimer(loader.Module):
         timer -= 1
         self.set("timer", timer)
         await call.answer()
-        
+
         await call.edit(
             text=self.strings("text").format(timer),
             reply_markup=[
@@ -118,20 +107,14 @@ class InlineTimer(loader.Module):
                         "input": "✍️ Enter new time IN SECONDS",
                         "handler": self.input_handler,
                     },
-                    {
-                        "text": "+1 sec",
-                        "callback": self.increment
-                    }
-                ],     
+                    {"text": "+1 sec", "callback": self.increment},
+                ],
                 [
-                    {
-                        "text": "✅",
-                        "callback": self.proceed   
-                    },
+                    {"text": "✅", "callback": self.proceed},
                     {
                         "text": "❌",
                         "action": "close",
-                    }
+                    },
                 ],
             ],
         )
@@ -141,7 +124,7 @@ class InlineTimer(loader.Module):
         timer += 1
         self.set("timer", timer)
         await call.answer()
-        
+
         await call.edit(
             text=self.strings("text").format(timer),
             reply_markup=[
@@ -155,20 +138,14 @@ class InlineTimer(loader.Module):
                         "input": "✍️ Enter new time IN SECONDS",
                         "handler": self.input_handler,
                     },
-                    {
-                        "text": "+1 sec",
-                        "callback": self.increment
-                    }
-                ],     
+                    {"text": "+1 sec", "callback": self.increment},
+                ],
                 [
-                    {
-                        "text": "✅",
-                        "callback": self.proceed   
-                    },
+                    {"text": "✅", "callback": self.proceed},
                     {
                         "text": "❌",
                         "action": "close",
-                    }
+                    },
                 ],
             ],
         )
@@ -177,12 +154,12 @@ class InlineTimer(loader.Module):
         if not query.isdigit():
             await call.answer("Вы ввели не число!")
             return
-                
+
         self.set("timer", int(query))
-        
+
         timer = self.get("timer", int(query))
         await call.answer()
-        
+
         await call.edit(
             text=self.strings("text").format(timer),
             reply_markup=[
@@ -196,20 +173,14 @@ class InlineTimer(loader.Module):
                         "input": "✍️ Enter new time IN SECONDS",
                         "handler": self.input_handler,
                     },
-                    {
-                        "text": "+1 sec",
-                        "callback": self.increment
-                    }
-                ],     
+                    {"text": "+1 sec", "callback": self.increment},
+                ],
                 [
-                    {
-                        "text": "✅",
-                        "callback": self.proceed   
-                    },
+                    {"text": "✅", "callback": self.proceed},
                     {
                         "text": "❌",
                         "action": "close",
-                    }
+                    },
                 ],
             ],
         )

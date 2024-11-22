@@ -60,7 +60,7 @@ class FakeData(loader.Module):
             "  номер - {number}\n"
             "  истекает - {expiration}"
         ),
-        "_cls_doc": "Просто фейковые данные о людях и их кредитных карт"
+        "_cls_doc": "Просто фейковые данные о людях и их кредитных карт",
     }
 
     def get_formatted_person_text(self, data: Dict[str, Any]) -> str:

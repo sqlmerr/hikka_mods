@@ -19,24 +19,24 @@ __version__ = (1, 0, 0)
 # импортируем нужные библиотеки
 import asyncio
 
-from telethon.tl.types import Message, ChatAdminRights
+from telethon.tl.types import Message
 
-from telethon import events, functions, types
+from telethon import functions
 import logging
-import re
 
-from ..inline.types import InlineCall
 from .. import loader, utils
 
 
 logger = logging.getLogger(__name__)
 
+
 # сам класс модуля
 @loader.tds
 class AnimatedProfile(loader.Module):
     """Module for your profile animation (name, bio) look in the config | Модуль для анимации вашего профиля (имя, био) смотрите конфиг"""
+
     strings = {
-        "name" : "AnimatedProfile",
+        "name": "AnimatedProfile",
         "name_delay": "Time between frames of name animation",
         "animated_name_frames": "Name animation frames",
         "not_name_frames": "<emoji document_id=5447644880824181073>⚠️</emoji> See the config! In the animated_name_frames parameter, put your animation frames by name",
@@ -75,7 +75,9 @@ class AnimatedProfile(loader.Module):
                 "animated_name_frames",
                 [],
                 lambda: self.strings("animated_name_frames"),
-                validator=loader.validators.Series(loader.validators.Union(loader.validators.String())),
+                validator=loader.validators.Series(
+                    loader.validators.Union(loader.validators.String())
+                ),
             ),
             loader.ConfigValue(
                 "name_delay",
@@ -87,7 +89,9 @@ class AnimatedProfile(loader.Module):
                 "animated_bio_frames",
                 [],
                 lambda: self.strings("animated_bio_frames"),
-                validator=loader.validators.Series(loader.validators.Union(loader.validators.String())),
+                validator=loader.validators.Series(
+                    loader.validators.Union(loader.validators.String())
+                ),
             ),
             loader.ConfigValue(
                 "bio_delay",
@@ -108,10 +112,11 @@ class AnimatedProfile(loader.Module):
             while self.aname:
                 for n in self.config["animated_name_frames"]:
                     await asyncio.sleep(self.config["name_delay"])
-                    await self.client(functions.account.UpdateProfileRequest(first_name=n))
+                    await self.client(
+                        functions.account.UpdateProfileRequest(first_name=n)
+                    )
         else:
             return await utils.answer(message, self.strings("name_is_enabled"))
-
 
     @loader.command(alias="abio", ru_doc="""(abio) Включить анимацию био""")
     async def animatedbio(self, message: Message):
@@ -128,7 +133,9 @@ class AnimatedProfile(loader.Module):
         else:
             return await utils.answer(message, self.strings("bio_is_enabled"))
 
-    @loader.command(alias="stopaname", ru_doc="""(stopaname) Выключить анимацию имени""")
+    @loader.command(
+        alias="stopaname", ru_doc="""(stopaname) Выключить анимацию имени"""
+    )
     async def stopanimatedname(self, message: Message):
         """(stopaname) Turn off name animation"""
         if self.aname is False:

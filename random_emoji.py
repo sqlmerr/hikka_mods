@@ -20,17 +20,14 @@ from hikkatl.tl.types import Message
 @loader.tds
 class RandomEmoji(loader.Module):
     """Just random emojis"""
-    
+
     strings = {"name": "RandomEmoji"}
-    
+
     @loader.command()
     async def random_emoji(self, message: Message):
         """Random emoji"""
         url = "https://emojihub.yurace.pro/api/random"
         emoji = await utils.run_sync(requests.get, url)
         emoji = emoji.json()
-        
-        await utils.answer(
-            message,
-            "".join(html for html in emoji["htmlCode"])
-        )
+
+        await utils.answer(message, "".join(html for html in emoji["htmlCode"]))

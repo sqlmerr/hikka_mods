@@ -18,32 +18,32 @@ __version__ = (1, 0, 0)
 # only hikka
 
 # импортируем нужные библиотеки
-import asyncio
 
 from telethon.tl.types import Message, ChatAdminRights
-from telethon import events, functions, types
+from telethon import functions
 
 import logging
 
-import re
 
 from .. import loader, utils
-from ..inline.types import InlineCall
 
 
 logger = logging.getLogger(__name__)
+
 
 # сам класс модуля
 @loader.tds
 class MineEVO_logs(loader.Module):
     """Полезный модуль для логгирования в боте @mine_evo_bot | Для работы поставьте в конфиге ваш ник | И загляните в конфиг"""
+
     # нужные переменные
     strings = {
         "name": "MineEVO-logging",
         "status": "Включен ли модуль или нет",
         "nickname": "Ваш ник в боте (важно)",
-        "logging": "То, что будет логгироваться"
+        "logging": "То, что будет логгироваться",
     }
+
     async def client_ready(self):
         # создается чат
         self._mineevologs_channel, _ = await utils.asset_channel(
@@ -55,16 +55,22 @@ class MineEVO_logs(loader.Module):
             _folder="hikka",
         )
         # в этот чат добавляется бот @mine_evo_bot
-        await self.client(functions.channels.InviteToChannelRequest(self._mineevologs_channel, ['@mine_evo_bot']))
+        await self.client(
+            functions.channels.InviteToChannelRequest(
+                self._mineevologs_channel, ["@mine_evo_bot"]
+            )
+        )
         # и этому боту выдаются права админа, для корректной работы бота
-        await self.client(functions.channels.EditAdminRequest(
+        await self.client(
+            functions.channels.EditAdminRequest(
                 channel=self._mineevologs_channel,
                 user_id="@mine_evo_bot",
-                admin_rights=ChatAdminRights(ban_users=True, post_messages=True, edit_messages=True),
+                admin_rights=ChatAdminRights(
+                    ban_users=True, post_messages=True, edit_messages=True
+                ),
                 rank="MineEVO-logs",
             )
         )
-            
 
     # функция, связанная с ООП и нужная для создания конфига
     def __init__(self):
@@ -73,13 +79,21 @@ class MineEVO_logs(loader.Module):
                 "status",
                 False,
                 lambda: self.strings("status"),
-                validator=loader.validators.Boolean()
+                validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
                 "logging",
                 ["выкопанные_кейсы", "передачи_кейсов_тебе", "передачи_кейсов_от_тебя"],
                 lambda: self.strings("logging"),
-                validator=loader.validators.MultiChoice(["выкопанные_кейсы", "переводы_тебе", "переводы_от_тебя", "передачи_кейсов_тебе", "передачи_кейсов_от_тебя"]),
+                validator=loader.validators.MultiChoice(
+                    [
+                        "выкопанные_кейсы",
+                        "переводы_тебе",
+                        "переводы_от_тебя",
+                        "передачи_кейсов_тебе",
+                        "передачи_кейсов_от_тебя",
+                    ]
+                ),
             ),
         )
 
@@ -94,9 +108,11 @@ class MineEVO_logs(loader.Module):
             else "Логгирование выключено <emoji document_id=5409048419211682843>💲</emoji>"
         )
 
-        await utils.answer(message, "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status))
+        await utils.answer(
+            message,
+            "<emoji document_id=5314346928660554905>⚠️</emoji> <b>{}</b>".format(status),
+        )
 
-    
     @loader.watcher(only_messages=True, chat_id=5522271758)
     async def watcher(self, message: Message):
         if self.config["status"]:
@@ -118,9 +134,17 @@ class MineEVO_logs(loader.Module):
                     peredacha_to = True
 
             if mined_cases:
-                if "✉️ Ты нашел(ла) конверт." in message.raw_text or "🧧 Ты нашел(ла) редкий конверт." in message.raw_text or "📦 Ты нашел(ла) Кейс!" in message.raw_text or "🗳 Ты нашел(ла) Редкий Кейс!" in message.raw_text or "🕋 Ты нашел(ла) Мифический Кейс!" in message.raw_text or "💎 Ты нашел(ла) Кристальный Кейс!" in message.raw_text or "💫" in message.raw_text:
+                if (
+                    "✉️ Ты нашел(ла) конверт." in message.raw_text
+                    or "🧧 Ты нашел(ла) редкий конверт." in message.raw_text
+                    or "📦 Ты нашел(ла) Кейс!" in message.raw_text
+                    or "🗳 Ты нашел(ла) Редкий Кейс!" in message.raw_text
+                    or "🕋 Ты нашел(ла) Мифический Кейс!" in message.raw_text
+                    or "💎 Ты нашел(ла) Кристальный Кейс!" in message.raw_text
+                    or "💫" in message.raw_text
+                ):
                     await message.forward_to(self._mineevologs_channel)
-                    #await self.client.send_message(self._mineevologs_channel, message.text)
+                    # await self.client.send_message(self._mineevologs_channel, message.text)
             if perevod_me:
                 if "перевел(а) тебе" in message.raw_text:
                     await message.forward_to(self._mineevologs_channel)

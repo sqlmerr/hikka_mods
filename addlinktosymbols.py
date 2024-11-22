@@ -9,34 +9,36 @@
 # meta developer: @sqlmerr_m
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/sqlmerrmodules_example.png?raw=true
 
-import asyncio
 from telethon.tl.types import Message
-from telethon import events, functions, types
 from .. import loader, utils
+
 
 @loader.tds
 class AddLinkToSymbols(loader.Module):
     """Add link to symbols in text | Добавить ссылку на определённые символы в тексте"""
+
     strings = {
         "name": "AddLinkToSymbols",
         "noargs": "<emoji document_id=5240241223632954241>🚫</emoji> <b>You didn't enter any arguments</b>",
         "IndexError": "<emoji document_id=5431571841892228467>😟</emoji> <b>You have entered too few arguments</b>",
         "wait": "<emoji document_id=5411225014148014586>🔴</emoji> <b>Please wait a second...</b>",
-        "none": "<emoji document_id=5210952531676504517>❌</emoji> <b>ERROR</b>"
+        "none": "<emoji document_id=5210952531676504517>❌</emoji> <b>ERROR</b>",
     }
 
     strings_ru = {
         "noargs": "<emoji document_id=5240241223632954241>🚫</emoji> <b>Вы не ввели аргументы</b>",
         "IndexError": "<emoji document_id=5431571841892228467>😟</emoji> <b>Вы ввели слишком мало аргументов</b>",
         "wait": "<emoji document_id=5411225014148014586>🔴</emoji> <b>Подождите немного...</b>",
-        "none": "<emoji document_id=5210952531676504517>❌</emoji> <b>ОШИБКА</b>"
+        "none": "<emoji document_id=5210952531676504517>❌</emoji> <b>ОШИБКА</b>",
     }
 
-    @loader.command(ru_doc="[символы] [ссылка] [текст или реплай] Добавить ссылку на символы\n\nПример: .addlinktosymbols ап.ев https://example.com привет. Еееее хай\nСимволы пишите без пробелов. ")
+    @loader.command(
+        ru_doc="[символы] [ссылка] [текст или реплай] Добавить ссылку на символы\n\nПример: .addlinktosymbols ап.ев https://example.com привет. Еееее хай\nСимволы пишите без пробелов. "
+    )
     async def addlinktosymbols(self, m: Message):
         """
         [symbols] [link] [text or reply] Add link to symbols
-        
+
         Example: .addlinktosymbols ah.e https://example.com hi hello. YOOOOOOO
         Write characters without spaces.
         """
@@ -45,7 +47,6 @@ class AddLinkToSymbols(loader.Module):
         if not args:
             return await utils.answer(m, self.strings("noargs"))
         reply = await m.get_reply_message()
-
 
         try:
             symbols = args[0]
@@ -62,7 +63,7 @@ class AddLinkToSymbols(loader.Module):
                 txt += t
             else:
                 txt += t + " "
-        
+
         real_txt = ""
         for _ in range(len(txt)):
             if txt[_] in symbols:
