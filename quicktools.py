@@ -46,7 +46,7 @@ class QuickTools(loader.Module):
         "no_reply": "<emoji document_id=5210952531676504517>❌</emoji> <b>Вы не ответили на сообщение!</b>",
         "no_args": "<emoji document_id=5210952531676504517>❌</emoji> <b>Вы не передали аргументы!</b>",
         "no_reply_markup": "<emoji document_id=5210952531676504517>❌</emoji> Вы ответили на сообщение, где нет кнопок!",
-        "cls_doc": "Модуль с разными быстрыми и полезными инструментами",
+        "_cls_doc": "Модуль с разными быстрыми и полезными инструментами",
     }
 
     @loader.command(
