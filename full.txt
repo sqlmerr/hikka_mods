@@ -13,3 +13,4 @@ codeformat
 fakedata
 upgradedeval
 triggers
+quicktools
