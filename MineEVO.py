@@ -20,8 +20,9 @@ __version__ = (1, 1, 3)
 # импортируем нужные библиотеки
 import asyncio
 
-from telethon.tl.types import Message, ChatAdminRights
-from telethon import functions
+from hikkatl.tl.patched import Message
+from hikkatl.tl.types import ChatAdminRights
+from hikkatl import functions
 
 import logging
 
@@ -366,8 +367,8 @@ class MineEVO(loader.Module):
             while self.sell:
                 async with self._client.conversation(self._mineevo_channel) as conv:
                     if self.config["autoboost_status"]:
-                        o = await conv.send_message("буст д 1.5")
-                        oo = await conv.get_response()
+                        await conv.send_message("буст д 1.5")
+                        await conv.get_response()
                     a = await conv.send_message("инв")
                     # получаем ответ
                     b = await conv.get_response()

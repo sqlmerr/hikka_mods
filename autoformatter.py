@@ -19,7 +19,7 @@
 
 # импортируем нужные библиотеки
 
-from telethon.tl.types import Message
+from hikkatl.tl.patched import Message
 
 import logging
 
@@ -90,7 +90,6 @@ class AutoFormatter(loader.Module):
         if not self.config["status"]:
             return
 
-        reply = await message.get_reply_message()
         exc = self.config["exceptions"]
         if message.from_id == self._tg_id:
             f = self.config["format"]

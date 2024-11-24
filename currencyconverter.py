@@ -18,12 +18,13 @@ async def find_currency(from_: str, to: str) -> Union[Tuple[str, str, float], No
         )
         json: Dict[str, str] = await res.json()
         close_match = get_close_matches(from_, json.keys(), 1, cutoff=0.1)
-        if close_match and close_match[0] != "":
-            from_currency = json[close_match[0]]
-            if not from_currency:
-                return None
+        if not close_match or close_match[0] == "":
+            return
+        from_currency = json[close_match[0]]
+        if not from_currency:
+            return
 
-            from_currency = close_match[0].upper()
+        from_currency = close_match[0].upper()
 
         res2 = await session.get(
             f"https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/{close_match[0]}.json"
@@ -35,11 +36,13 @@ async def find_currency(from_: str, to: str) -> Union[Tuple[str, str, float], No
         if close_match2 and close_match2[0] != "":
             to_currency = json2[close_match[0]]
             if not to_currency:
-                return None
+                return
             to_currency = close_match2[0].upper()
             price = json2[from_currency.lower()][to_currency.lower()]
             if not isinstance(price, float):
-                return None
+                return
+        else:
+            return
 
     return from_currency, to_currency, price
 

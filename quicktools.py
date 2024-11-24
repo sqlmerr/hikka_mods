@@ -1,4 +1,3 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from hikkatl.tl.types import (
     ReplyInlineMarkup,
     KeyboardButtonCallback,
