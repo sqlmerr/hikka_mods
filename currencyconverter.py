@@ -8,12 +8,17 @@ from hikkatl.tl.patched import Message
 from difflib import get_close_matches
 
 # meta developer: @sqlmerr_m
+# meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/banners/currencyconverter.png?raw=true
+
+
 async def find_currency(from_: str, to: str) -> Union[Tuple[str, str, float], None]:
     async with aiohttp.ClientSession() as session:
-        res = await session.get("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json")
+        res = await session.get(
+            "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json"
+        )
         json: Dict[str, str] = await res.json()
         close_match = get_close_matches(from_, json.keys(), 1, cutoff=0.1)
-        if close_match and close_match[0] != '':
+        if close_match and close_match[0] != "":
             from_currency = json[close_match[0]]
             if not from_currency:
                 return None
@@ -21,10 +26,13 @@ async def find_currency(from_: str, to: str) -> Union[Tuple[str, str, float], No
             from_currency = close_match[0].upper()
 
         res2 = await session.get(
-            f"https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/{close_match[0]}.json")
+            f"https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/{close_match[0]}.json"
+        )
         json2: Dict[str, Union[str, Dict[str, str]]] = await res2.json()
-        close_match2 = get_close_matches(to, json2[close_match[0]].keys(), 1, cutoff=0.1)
-        if close_match2 and close_match2[0] != '':
+        close_match2 = get_close_matches(
+            to, json2[close_match[0]].keys(), 1, cutoff=0.1
+        )
+        if close_match2 and close_match2[0] != "":
             to_currency = json2[close_match[0]]
             if not to_currency:
                 return None
@@ -34,6 +42,7 @@ async def find_currency(from_: str, to: str) -> Union[Tuple[str, str, float], No
                 return None
 
     return from_currency, to_currency, price
+
 
 @loader.tds
 class CurrencyConverter(loader.Module):
@@ -52,7 +61,7 @@ class CurrencyConverter(loader.Module):
         "no_args": "<emoji document_id=5210952531676504517>❌</emoji> <b>Вы не передали аргументы!</b>",
         "args_too_short": "<emoji document_id=5210952531676504517>❌</emoji> <b>Слишком короткие аргументы!</b>",
         "not_found": "<emoji document_id=5210952531676504517>❌</emoji> <b>Валюта не найдена!</b>",
-        "_cls_doc": "Модуль для конвертации большого количества валют в другие валюты"
+        "_cls_doc": "Модуль для конвертации большого количества валют в другие валюты",
     }
 
     @loader.command(ru_doc="[from] [to] Конвертировать одну валюту в другую")
@@ -74,4 +83,9 @@ class CurrencyConverter(loader.Module):
             await utils.answer(message, self.strings("not_found"))
             return
 
-        await utils.answer(message, self.strings["msg"].format(from_=result[0], to=result[1], price=round(result[2], 2)))
+        await utils.answer(
+            message,
+            self.strings["msg"].format(
+                from_=result[0], to=result[1], price=round(result[2], 2)
+            ),
+        )
