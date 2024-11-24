@@ -1,4 +1,3 @@
-MineEVO-logging
 MineEVO
 animatedprofile
 autoformatter
