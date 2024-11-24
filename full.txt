@@ -13,3 +13,4 @@ fakedata
 upgradedeval
 triggers
 quicktools
+currencyconverter
