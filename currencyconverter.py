@@ -80,7 +80,7 @@ class CurrencyConverter(loader.Module):
             await utils.answer(message, self.strings("args_too_short"))
             return
 
-        from_, to = args[0], args[1]
+        from_, to = args[0].lower(), args[1].lower()
         result = await find_currency(from_, to)
         if result is None:
             await utils.answer(message, self.strings("not_found"))
