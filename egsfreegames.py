@@ -11,9 +11,9 @@
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/banners/egsfreegames.png?raw=true
 
 import logging
-from datetime import datetime, UTC
 from typing import Dict, List, Optional
 
+import datetime
 import aiohttp
 
 from .. import utils, loader
@@ -130,8 +130,8 @@ class EGSFreeGames(loader.Module):
         return games_list
 
     def get_normal_timestamp(self, date: str) -> str:
-        dt = datetime.fromisoformat(date.replace("Z", "+00:00"))
-        dt = dt.astimezone(UTC)
+        dt = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
+        dt = dt.astimezone(datetime.UTC)
         formatted_date = dt.strftime("%d.%m.%Y %H:%M (UTC)")
         return formatted_date
 
