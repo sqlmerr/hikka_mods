@@ -131,7 +131,7 @@ class EGSFreeGames(loader.Module):
 
     def get_normal_timestamp(self, date: str) -> str:
         dt = datetime.datetime.fromisoformat(date.replace("Z", "+00:00"))
-        dt = dt.astimezone(datetime.UTC)
+        dt = dt.astimezone(datetime.timezone.utc)
         formatted_date = dt.strftime("%d.%m.%Y %H:%M (UTC)")
         return formatted_date
 
