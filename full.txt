@@ -1,4 +1,3 @@
-MineEVO
 animatedprofile
 autoformatter
 autoforward
@@ -14,3 +13,4 @@ upgradedeval
 triggers
 quicktools
 currencyconverter
+egsfreegames
