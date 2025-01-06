@@ -103,7 +103,8 @@ class EGSFreeGames(loader.Module):
                 }
                 price_info["discount"] = discount
 
-        url = "https://store.epicgames.com/ru/p/" + game["productSlug"]
+        slug = game["productSlug"] if game["productSlug"] else game["catalogNs"]["mappings"][0]["pageSlug"]
+        url = "https://store.epicgames.com/ru/p/" + slug
 
         return {
             "title": game["title"],
@@ -137,7 +138,6 @@ class EGSFreeGames(loader.Module):
 
     async def get_free_games(self, region: str = "RU") -> Optional[List]:
         url = "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions"
-        "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?locale=en-US&county=RU&allowCountries=RU"
         params = {"locale": "en-US", "country": region, "allowCountries": region}
         try:
             async with aiohttp.ClientSession() as session:
