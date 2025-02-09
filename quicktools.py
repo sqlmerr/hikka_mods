@@ -100,6 +100,7 @@ class QuickTools(loader.Module):
                 value = button.url
                 value_type = "url"
             else:
+                text += f"  - <i>{button.text}</i>\n"
                 continue
 
             text += f"  - <i>{button.text}</i> - {value_type}: <code>{value}</code>\n"
