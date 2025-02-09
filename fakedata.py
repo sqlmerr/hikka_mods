@@ -67,13 +67,13 @@ class FakeData(loader.Module):
         address = data["address"]
         return self.strings("person_text").format(
             emoji="👨" if data["gender"] == "male" else "👩",
-            name=f'{data["firstname"]} {data["lastname"]}',
+            name=f"{data['firstname']} {data['lastname']}",
             email=data["email"],
             phone=data["phone"],
             birthday=data["birthday"],
             gender=data["gender"],
             ip=data["ip"],
-            address=f'{address["country"]}, {address["city"]}, {address["street"]}',
+            address=f"{address['country']}, {address['city']}, {address['street']}",
         )
 
     def get_formatted_credit_card_text(self, data: Dict[str, Any]) -> str:

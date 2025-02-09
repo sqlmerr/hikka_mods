@@ -103,7 +103,11 @@ class EGSFreeGames(loader.Module):
                 }
                 price_info["discount"] = discount
 
-        slug = game["productSlug"] if game["productSlug"] else game["catalogNs"]["mappings"][0]["pageSlug"]
+        slug = (
+            game["productSlug"]
+            if game["productSlug"]
+            else game["catalogNs"]["mappings"][0]["pageSlug"]
+        )
         url = "https://store.epicgames.com/ru/p/" + slug
 
         return {

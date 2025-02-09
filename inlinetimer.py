@@ -22,14 +22,14 @@ class InlineTimer(loader.Module):
 
     strings = {
         "name": "InlineTimer",
-        "text": ("⏲ <b>Inline timer</b>\n" "⏰ <i>Current time</i>: {} seconds"),
+        "text": "⏲ <b>Inline timer</b>\n⏰ <i>Current time</i>: {} seconds",
         "successful": "Great, in {} seconds the inline bot will send you a message via PM",
         "timer_created": "<b>Timer created!</b>",
         "text_cfg": "The text that your inline bot will send when the timer expires",
         "below_zero": "Time cannot be below zero",
     }
     strings_ru = {
-        "text": ("⏲ <b>Inline timer</b>\n" "⏰ <i>Текущее время</i>: {} секунд"),
+        "text": "⏲ <b>Inline timer</b>\n⏰ <i>Текущее время</i>: {} секунд",
         "successful": "Отлично, через {} секунд инлайн бот отправит вам сообщение в лс",
         "timer_created": "<b>Таймер создан!</b>",
         "text_cfg": "Текст, который будет писать ваш инлайн бот по истечению времени таймера",
