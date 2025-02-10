@@ -12,12 +12,11 @@
 # .textformat
 # ---------------------------------------------------------------------------------------------
 
-# версия модуля
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/autoformatter.png?raw=true
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_autoformatter.png?raw=true
 # meta developer: @sqlmerr_m
 # only hikka
 
-# импортируем нужные библиотеки
 
 from hikkatl.tl.patched import Message
 
@@ -30,12 +29,10 @@ from .. import loader, utils
 logger = logging.getLogger(__name__)
 
 
-# сам класс модуля
 @loader.tds
 class AutoFormatter(loader.Module):
     """Automatically formats the text of your messages | Check The Config"""
 
-    # нужные переменные
     strings = {
         "name": "AutoFormatter",
         "status": "Module enabled or disabled",

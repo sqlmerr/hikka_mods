@@ -3,6 +3,7 @@ from .. import loader, utils
 import requests
 
 # meta developer: @sqlmerr_m
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/numberfacts.png?raw=true
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_numberfacts.png?raw=true
 
 

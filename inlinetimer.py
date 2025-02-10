@@ -7,6 +7,7 @@
 ╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝
 """
 # meta developer: @sqlmerr_m
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/inlinetimer.png?raw=true
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_inlinetimer.png?raw=true
 
 import asyncio

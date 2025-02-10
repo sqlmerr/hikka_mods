@@ -11,6 +11,7 @@
 """
 
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/banners/triggers.png?raw=true
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/triggers.png?raw=true
 # meta developer: @sqlmerr_m
 # requires: cachetools
 
@@ -442,7 +443,7 @@ class Configuration:
 
 @loader.tds
 class Triggers(loader.Module):
-    """Triggers watches chat messages and can do anything, reply to a message with a given text, delete a message, execute any userbot command. Overall, a very cool module"""
+    """Triggers watch chat messages and can do anything, reply to a message with a given text, delete a message, execute any userbot command. Overall, a very cool module"""
 
     strings = {
         "name": "Triggers",
@@ -696,7 +697,7 @@ class Triggers(loader.Module):
 
         await utils.answer(message, self.strings("not_found"))
 
-    @loader.command()
+    @loader.command(ru_doc="[айди колбека: str] <реплай на пайтон код> - Добавить колбек, который триггер сможет выполнить")
     async def tcallback(self, message: Message):
         """[callback_id: str] <reply to python code> - Add a callback that trigger can execute"""
         args = utils.get_args_raw(message).split()

@@ -8,6 +8,7 @@
 """
 
 # meta developer: @sqlmerr_m
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/egsfreegames.png?raw=true
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/banners/egsfreegames.png?raw=true
 
 import logging

@@ -9,6 +9,7 @@ from .. import utils, loader
 from hikkatl.tl.patched import Message
 
 # meta developer: @sqlmerr_m
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/quicktools.png?raw=true
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/quicktools.png?raw=true
 
 

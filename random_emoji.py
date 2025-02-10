@@ -9,6 +9,7 @@
 
 
 # meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_randomemoji.png?raw=true
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/random_emoji.png?raw=true
 # meta developer: @sqlmerr_m
 
 import requests
