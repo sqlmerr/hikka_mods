@@ -6,16 +6,18 @@
 ██████╔╝░╚═██╔═╝░███████╗██║░╚═╝░██║███████╗██║░░██║██║░░██║
 ╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚═╝╚═╝░░╚═╝
 """
+
 # meta developer: @sqlmerr_m
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/addlinktosymbols.png?raw=true
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/sqlmerrmodules_example.png?raw=true
 
-from telethon.tl.types import Message
+from hikkatl.tl.types import Message
 from .. import loader, utils
 
 
 @loader.tds
 class AddLinkToSymbols(loader.Module):
-    """Add link to symbols in text | Добавить ссылку на определённые символы в тексте"""
+    """Add link to symbols in text"""
 
     strings = {
         "name": "AddLinkToSymbols",
@@ -30,6 +32,7 @@ class AddLinkToSymbols(loader.Module):
         "IndexError": "<emoji document_id=5431571841892228467>😟</emoji> <b>Вы ввели слишком мало аргументов</b>",
         "wait": "<emoji document_id=5411225014148014586>🔴</emoji> <b>Подождите немного...</b>",
         "none": "<emoji document_id=5210952531676504517>❌</emoji> <b>ОШИБКА</b>",
+        "_cls_doc": "Добавить ссылку на определённые символы в тексте"
     }
 
     @loader.command(

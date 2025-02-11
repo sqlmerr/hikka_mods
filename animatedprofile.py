@@ -12,16 +12,15 @@
 # .animatedname (.aname) | .animatedbio (.abio) | .stopanimatedname (.stopaname) | .stopanimatedbio (.stopabio)
 # ---------------------------------------------------------------------------------------------
 
-__version__ = (1, 0, 0)
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/animatedprofile.png?raw=true
 # meta developer: @sqlmerr_m
 # only hikka
 
-# импортируем нужные библиотеки
 import asyncio
 
-from telethon.tl.types import Message
+from hikkatl.tl.types import Message
 
-from telethon import functions
+from hikkatl import functions
 import logging
 
 from .. import loader, utils
@@ -30,10 +29,9 @@ from .. import loader, utils
 logger = logging.getLogger(__name__)
 
 
-# сам класс модуля
 @loader.tds
 class AnimatedProfile(loader.Module):
-    """Module for your profile animation (name, bio) look in the config | Модуль для анимации вашего профиля (имя, био) смотрите конфиг"""
+    """Module for your profile animation (name, bio) look in the config"""
 
     strings = {
         "name": "AnimatedProfile",
@@ -65,6 +63,7 @@ class AnimatedProfile(loader.Module):
         "bio_is_enabled": "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация био уже включена, используйте <code>.stopabio</code>, чтобы выключить.",
         "bio_is_disabled": "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация био уже выключена.",
         "bio_turned_off": "<emoji document_id=5447644880824181073>⚠️</emoji> Анимация био выключена.",
+        "_cls_doc": "Модуль для анимации вашего профиля (имя, био) смотрите конфиг"
     }
 
     def __init__(self):
@@ -104,7 +103,7 @@ class AnimatedProfile(loader.Module):
     @loader.command(alias="aname", ru_doc="""(aname) Включить анимацию имени""")
     async def animatedname(self, message: Message):
         """(aname) Turn on name animation"""
-        if self.config["animated_name_frames"] == []:
+        if not self.config["animated_name_frames"]:
             return await utils.answer(message, self.strings("not_name_frames"))
         if self.aname is False:
             self.aname = True
@@ -121,7 +120,7 @@ class AnimatedProfile(loader.Module):
     @loader.command(alias="abio", ru_doc="""(abio) Включить анимацию био""")
     async def animatedbio(self, message: Message):
         """(abio) Turn on bio animation"""
-        if self.config["animated_bio_frames"] == []:
+        if not self.config["animated_bio_frames"]:
             return await utils.answer(message, self.strings("not_bio_frames"))
         if self.abio is False:
             self.abio = True

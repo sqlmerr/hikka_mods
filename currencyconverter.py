@@ -13,6 +13,7 @@ from ..inline.types import InlineMessage
 
 
 # meta developer: @sqlmerr_m
+# meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/currencyconverter.png?raw=true
 # meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/banners/currencyconverter.png?raw=true
 
 
