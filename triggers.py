@@ -884,7 +884,6 @@ class Triggers(loader.Module):
                 await message.delete()
             elif action_type == "invoke":
                 if self.config["allow_invoke"]:
-                    logger.info("executing command %s", trigger["action"]["data"].get("command"))
                     await self.invoke(
                         trigger["action"]["data"].get("command"),
                         trigger["action"]["data"].get("args", ""),
