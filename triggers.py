@@ -592,7 +592,6 @@ class Triggers(loader.Module):
             filters=Filters(),
         )
         triggers.append(trigger)
-        logger.info(triggers)
         self.set("triggers", triggers)
 
         text = self.strings("text_add").format(id=trigger["id"])
