@@ -676,9 +676,9 @@ class Triggers(loader.Module):
 
         await utils.answer(message, text)
 
-    @loader.command(ru_doc="Конфиг модуля")
+    @loader.command(ru_doc="[необязятельно: айди триггера] - Конфиг модуля")
     async def tconfig(self, message: Message):
-        """Config for the module."""
+        """[optional: trigger id] - Triggers config."""
         config = Configuration(self.manager)
         args = utils.get_args(message)
         if len(args) < 1 or not args[0].isdigit():
