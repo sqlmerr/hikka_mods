@@ -40,7 +40,7 @@ class TranslationManager(loader.Module):
 
     strings_ru = {
         "no_args": "<emoji document_id=5210952531676504517>❌</emoji> Вы не передали аргументы!",
-        "get_txt": "<code>`{}`</code> <b>Перевод модуля</b><code>{}</code> <b>в языке </b><code>{}</code><b>:</b>\n<blockquote>{}</blockquote>\n{}",
+        "get_txt": "<code>`{}`</code> <b>Перевод модуля </b><code>{}</code> <b>в языке </b><code>{}</code><b>:</b>\n<blockquote>{}</blockquote>\n{}",
         "custom": "<emoji document_id=5962952497197748583>🔧</emoji> <b>Перевод изменен</b>",
         "default": "<emoji document_id=5962952497197748583>🔧</emoji> <b>Перевод стандартный</b>",
         "404": "<emoji document_id=5210952531676504517>❌</emoji> <b>Модуль не найден!</b>",
@@ -74,7 +74,7 @@ class TranslationManager(loader.Module):
         log.info("Custom translations loaded")
 
     def get_one(self, mod: str, lang: str, name: str):
-        if not (strings := self.get("mods", {}).get(mod)):
+        if not (strings := self.get("mods", {}).get(mod)) or not strings.get(lang):
             module = self.lookup(mod)
             if not module:
                 raise ValueError("404")
@@ -116,15 +116,13 @@ class TranslationManager(loader.Module):
 
         mod, lang, key = args
         try:
-            tr, is_custom = self.get_one(mod, lang, key)
+            data = self.get_one(mod, lang, key)
+            log.info(data)
         except ValueError as e:
             await utils.answer(message, self.strings(e.args[0]))
             return
 
-        if not tr:
-            await utils.answer(message, self.strings("404"))
-            return
-        await utils.answer(message, self.strings("get_txt").format(key, mod, lang, utils.escape_html(tr), self.strings("custom") if is_custom else self.strings("default")))
+        await utils.answer(message, self.strings("get_txt").format(key, mod, lang, utils.escape_html(data[0]), self.strings("custom") if data[1] else self.strings("default")))
 
     @loader.command(ru_doc="[модуль] [язык] [ключ] [значение] - Изменить перевод")
     async def trset(self, message: Message):
