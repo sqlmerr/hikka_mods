@@ -107,6 +107,20 @@ class TranslationManager(loader.Module):
         mods[mod] = db_strings
         self.set("mods", mods)
 
+    def del_one(self, mod: str, lang: str, name: str):
+        mods = self.get("mods", {})
+        if not ((strings := mods.get(mod)) and strings.get(lang)):
+            return
+
+        lang_strings = strings.get(lang)
+        if not lang_strings.get(name):
+            return
+
+        del lang_strings[name]
+        strings[lang] = lang_strings
+        mods[mod] = strings
+        self.set("mods", mods)
+
     @loader.command(ru_doc="[модуль] [язык] [ключ] - Получить перевод")
     async def trget(self, message: Message):
         """[mod] [lang] [key] - Get current translation"""
@@ -116,13 +130,12 @@ class TranslationManager(loader.Module):
 
         mod, lang, key = args
         try:
-            data = self.get_one(mod, lang, key)
-            log.info(data)
+            tr, is_custom = self.get_one(mod, lang, key)
         except ValueError as e:
             await utils.answer(message, self.strings(e.args[0]))
             return
 
-        await utils.answer(message, self.strings("get_txt").format(key, mod, lang, utils.escape_html(data[0]), self.strings("custom") if data[1] else self.strings("default")))
+        await utils.answer(message, self.strings("get_txt").format(key, mod, lang, utils.escape_html(tr), self.strings("custom") if is_custom else self.strings("default")))
 
     @loader.command(ru_doc="[модуль] [язык] [ключ] [значение] - Изменить перевод")
     async def trset(self, message: Message):
@@ -133,6 +146,21 @@ class TranslationManager(loader.Module):
         mod, lang, key, val = args
         try:
             self.set_one(mod, lang, key, val)
+        except ValueError as e:
+            await utils.answer(message, self.strings(e.args[0]))
+            return
+        await utils.answer(message, self.strings("success"))
+
+    @loader.command(ru_doc="[модуль] [язык] [ключ] - Удалить кастомный перевод")
+    async def trdel(self, message: Message):
+        """[mod] [lang] [key] - Delete custom translation"""
+        if not (args := utils.get_args_raw(message).split()) or len(args) < 3:
+            await utils.answer(message, self.strings("no_args"))
+            return
+
+        mod, lang, key = args
+        try:
+            self.del_one(mod, lang, key)
         except ValueError as e:
             await utils.answer(message, self.strings(e.args[0]))
             return
