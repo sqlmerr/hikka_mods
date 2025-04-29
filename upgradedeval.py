@@ -17,7 +17,7 @@ from ..log import HikkaException
 from ..types import HikkaReplyMarkup
 
 
-# meta banner: https://github.com/sqlmerr/sqlmerr/blob/main/assets/hikka_mods/sqlmerrmodules_upgradedeval.png?raw=true
+# meta banner: https://github.com/sqlmerr/hikka_mods/blob/main/assets/banners/upgradedeval.png?raw=true
 # meta icon: https://github.com/sqlmerr/hikka_mods/blob/main/assets/icons/upgradedeval.png?raw=true
 # meta developer: @sqlmerr_m
 
